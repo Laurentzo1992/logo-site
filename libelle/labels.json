@@ -1,0 +1,27 @@
+{
+    "organisation": "LOGO SERVICES",
+    "menu": "Menu",
+    "about": "Qui sommes nous?",
+    "catalog": "Notre Catologue",
+    "services": "Services divers",
+    "bog": "Blog",
+    "slogan":"Nous Vous Accompagnons Dans votre Transformation Digitale",
+    "contact_nous":"Nous Contacter",
+    "label_name":"Nom complet",
+    "contrainte_name":"Le nom est requis",
+    "label_email":"Address email",
+    "contrainte_email":"email est requis",
+    "invalid_email":"Email non valid",
+    "telephone":"Numero de Téléphone",
+    "contrainte_telephone":"Numero Téléphone requis",
+    "message_envoye":"Message",
+    "contrainte_message":"Le message est requis",
+    "envoy_succes":"Envois effectué avec succès!",
+    "erreur_envoye":"Erreu d'envois du message!",
+    "envoye_message":"Envoyer",
+    "privacy_logo":"logo services 2025. All Rights Reserved",
+    "faq":"FAQ",
+    "terms":"Terms",
+    "privacy":"Privacy"
+
+}
