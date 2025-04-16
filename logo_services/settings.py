@@ -27,10 +27,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "siteweb",
     "blog",
     "catalog",
     "about",
+    "connexion",
+    "tinymce",
 ]
 
 MIDDLEWARE = [
@@ -157,6 +160,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "logo_services/static/images")
 
 # Default primary key field type
 
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

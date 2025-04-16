@@ -1,9 +1,211 @@
 {% extends "base.html" %}
 
+{% block content %}
+ <!-- Services Section -->
+<section id="services" class="py-5">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Nos Services</h2>
+              <p class="lead">Des solutions adaptées à vos besoins technologiques</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-code"></i>
+                  </div>
+                  <h4>Génie Logiciel</h4>
+                  <p>Développement d'applications sur mesure, intégration de systèmes et maintenance logicielle pour optimiser vos processus métier.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-file-alt"></i>
+                  </div>
+                  <h4>Numérisation de Documents</h4>
+                  <p>Transformation de vos archives papier en documents numériques consultables et indexés pour une gestion optimale de l'information.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-network-wired"></i>
+                  </div>
+                  <h4>Réseaux et Systèmes</h4>
+                  <p>Conception, déploiement et maintenance d'infrastructures réseau performantes et évolutives pour soutenir votre croissance.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <h4>Sécurité Informatique</h4>
+                  <p>Protection de vos données et systèmes contre les menaces informatiques avec des solutions de sécurité avancées et personnalisées.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-brain"></i>
+                  </div>
+                  <h4>Intelligence Artificielle</h4>
+                  <p>Intégration de technologies d'IA pour automatiser et optimiser vos processus d'affaires et analyses de données.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="services-card text-center">
+                  <div class="services-icon">
+                      <i class="fas fa-graduation-cap"></i>
+                  </div>
+                  <h4>Formation</h4>
+                  <p>Programmes de formation sur mesure pour renforcer les compétences technologiques de vos équipes et maximiser votre investissement IT.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
 
+<!-- Features Section -->
+<section id="features" class="py-5 bg-light">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Pourquoi Nous Choisir</h2>
+              <p class="lead">Des solutions technologiques adaptées aux défis contemporains</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4">
+              <div class="feature-item">
+                  <div class="feature-icon">
+                      <i class="fas fa-rocket"></i>
+                  </div>
+                  <h4>Innovation</h4>
+                  <p>Nous intégrons les dernières technologies pour vous offrir des solutions avant-gardistes</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="feature-item">
+                  <div class="feature-icon">
+                      <i class="fas fa-lock"></i>
+                  </div>
+                  <h4>Sécurité</h4>
+                  <p>Protection maximale de vos données et systèmes avec des protocoles de sécurité avancés</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="feature-item">
+                  <div class="feature-icon">
+                      <i class="fas fa-users"></i>
+                  </div>
+                  <h4>Expertise</h4>
+                  <p>Une équipe de professionnels qualifiés et expérimentés à votre service</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
 
-
-
-{% block main %}
-
-{% endblock main %}
+<!-- About Section -->
+<section id="about" class="py-5">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-6 about-image">
+              <img src="/api/placeholder/600/400" alt="À propos de Logo Services" class="img-fluid">
+          </div>
+          <div class="col-lg-6 about-content">
+              <h2 class="section-title">À Propos de <span class="logo-color-text">Logo Services</span></h2>
+              <p><span class="logo-color-text">Logo Services SARL</span> est une entreprise spécialisée dans les solutions informatiques avancées. Fondée avec la vision de transformer les défis numériques en opportunités, nous combinons expertise technique et connaissance approfondie des enjeux métiers.</p>
+              <p>Notre équipe est composée d'experts passionnés qui s'efforcent de créer des solutions sur mesure pour répondre aux besoins spécifiques de chaque client.</p>
+              <p>Nous croyons en l'innovation continue et nous nous engageons à fournir des solutions technologiques qui propulsent nos clients vers le succès dans l'ère numérique.</p>
+              <a href="#contact" class="btn btn-custom mt-3">Découvrez notre approche</a>
+          </div>
+      </div>
+  </div>
+</section>
+  <!-- Contact Section -->
+<section id="contact" class="py-5 bg-light">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Contactez-Nous</h2>
+              <p class="lead">Prêt à transformer votre infrastructure numérique? Parlons-en!</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+              <form>
+                  <div class="mb-3">
+                      <input type="text" class="form-control" placeholder="Votre nom" required>
+                  </div>
+                  <div class="mb-3">
+                      <input type="email" class="form-control" placeholder="Votre email" required>
+                  </div>
+                  <div class="mb-3">
+                      <input type="tel" class="form-control" placeholder="Votre téléphone">
+                  </div>
+                  <div class="mb-3">
+                      <select class="form-select">
+                          <option selected>Service qui vous intéresse</option>
+                          <option>Génie Logiciel</option>
+                          <option>Numérisation de Documents</option>
+                          <option>Réseaux et Systèmes</option>
+                          <option>Sécurité Informatique</option>
+                          <option>Intelligence Artificielle</option>
+                          <option>Formation</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <textarea class="form-control" rows="5" placeholder="Votre message" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-custom">Envoyer le message</button>
+              </form>
+          </div>
+          <div class="col-lg-6">
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="contact-info text-center">
+                          <div class="contact-icon">
+                              <i class="fas fa-map-marker-alt"></i>
+                          </div>
+                          <h5>Notre adresse</h5>
+                          <p>123 Avenue Exemple, Ville, Pays</p>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="contact-info text-center">
+                          <div class="contact-icon">
+                              <i class="fas fa-phone"></i>
+                          </div>
+                          <h5>Téléphone</h5>
+                          <p>+123 456 7890</p>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="contact-info text-center">
+                          <div class="contact-icon">
+                              <i class="fas fa-envelope"></i>
+                          </div>
+                          <h5>Email</h5>
+                          <p>contact@logoservices.com</p>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="contact-info text-center">
+                          <div class="contact-icon">
+                              <i class="fas fa-clock"></i>
+                          </div>
+                          <h5>Heures d'ouverture</h5>
+                          <p>Lun-Ven: 9h-18h</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock content %}

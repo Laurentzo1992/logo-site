@@ -2,6 +2,9 @@ import json
 import os
 from django.shortcuts import render
 from django.conf import settings
+from django.http import HttpResponse
+
+
 
 # Récupération du chemin du dossier contenant les fichiers JSON
 LIBELLE_DIR = settings.LIBELLE_FILE_DIR 
@@ -17,7 +20,13 @@ def index(request):
     except json.JSONDecodeError:
         labels = {"error": "Fichier JSON invalide"} 
     #print(labels)
-    return render(request, "base.html", {"labels": labels})
+    return render(request, "siteweb/index.html", {"labels": labels})
+
+
+
+
+
+
 
 
 
