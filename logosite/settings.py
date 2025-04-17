@@ -14,8 +14,9 @@ SECRET_KEY = "django-insecure-%@ukojo0)c$w*0q2o)(+pxkq-3y!snt*)7&5w1$j7skpjjepb$
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -46,7 +47,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "logo_services.urls"
+ROOT_URLCONF = "logosite.urls"
 
 TEMPLATES = [
     {
@@ -66,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "logo_services.wsgi.application"
+WSGI_APPLICATION = "logosite.wsgi.application"
 
 
 # Database
@@ -152,11 +153,11 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "logo_services/static")
+    os.path.join(BASE_DIR, "logosite/static")
 ]
 
 MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "logo_services/static/images")
+MEDIA_ROOT = os.path.join(BASE_DIR, "logosite/static/images")
 
 # Default primary key field type
 

@@ -3,4 +3,4 @@ Disallow: /admin/
 Disallow: /private/
 Allow: /
 
-Sitemap: https://www.logo-services.com/sitemap.xml
+Sitemap: https://logo-services.com/sitemap.xml
