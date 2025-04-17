@@ -1,43 +1,48 @@
+
 :root {
-            --primary-color: #00a19a; /* Vert bleuté du logo */
-            --secondary-color: #5b2c91; /* Violet du logo */
-            --light-color: #ffffff; /* Blanc */
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            background-color: #f8f9fa;
-        }
-        
-        .navbar {
-            background-color: var(--light-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.8rem;
-        }
-        
-        .navbar-brand img {
-            height: 40px;
-            margin-right: 10px;
-        }
-        
-        .nav-link {
-            color: #333;
-            font-weight: 500;
-            margin: 0 10px;
-            transition: all 0.3s;
-        }
-        
-        .nav-link:hover {
-            color: var(--secondary-color);
-        }
-        
+    --primary-color: #7BC142;
+    --secondary-color: #2B2873; 
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --light-color: #ffffff;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, 'Geneva', Verdana, sans-serif, 'Poppins';
+    color: #333;
+}
+
+.navbar {
+    background-color: var(--secondary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: var(--light-color) !important;
+    font-weight: 500;
+    margin: 0 10px;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
+
         #hero {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: var(--light-color);
@@ -303,3 +308,39 @@
         .newsletter-form .btn:hover {
             background-color: var(--secondary-color);
         }
+
+
+         /* Partners section styling */
+  #partners {
+    background-color: #fff;
+}
+
+.partner-logo {
+    max-width: 150px;
+    padding: 15px;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+}
+
+/* Custom carousel controls styling */
+#partner-carousel .carousel-control-prev,
+#partner-carousel .carousel-control-next {
+    width: 5%;
+}
+
+#partner-carousel .carousel-control-prev-icon,
+#partner-carousel .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    padding: 10px;
+}
+

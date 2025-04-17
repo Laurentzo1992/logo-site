@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Portfolio Section -->
+<section id="portfolio" class="py-5">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Nos Réalisations</h2>
+              <p class="lead">Découvrez notre cartographie de projets réalisés</p>
+          </div>
+      </div>
+      
+      <!-- Portfolio Filter -->
+      <div class="row mb-4">
+          <div class="col-12 text-center">
+              <div class="portfolio-filter">
+                  <button class="btn btn-outline-custom active" data-filter="*">Tous</button>
+                  <button class="btn btn-outline-custom" data-filter=".genie-logiciel">Génie Logiciel</button>
+                  <button class="btn btn-outline-custom" data-filter=".numerisation">Numérisation</button>
+                  <button class="btn btn-outline-custom" data-filter=".reseaux">Réseaux</button>
+                  <button class="btn btn-outline-custom" data-filter=".securite">Sécurité</button>
+                  <button class="btn btn-outline-custom" data-filter=".ia">Intelligence Artificielle</button>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Portfolio Grid -->
+      <div class="row portfolio-container">
+          <!-- Projet 1 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item genie-logiciel">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Application de gestion" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal1" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Application de gestion</h4>
+                      <p class="category">Génie Logiciel</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Projet 2 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item numerisation">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Système GED" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal2" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Système GED</h4>
+                      <p class="category">Numérisation</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Projet 3 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item reseaux">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Infrastructure Cloud" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal3" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Infrastructure Cloud</h4>
+                      <p class="category">Réseaux et Systèmes</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Projet 4 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item securite">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Audit de sécurité" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal4" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Audit de sécurité</h4>
+                      <p class="category">Sécurité Informatique</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Projet 5 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item ia">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Chatbot IA" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal5" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Chatbot IA</h4>
+                      <p class="category">Intelligence Artificielle</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Projet 6 -->
+          <div class="col-lg-4 col-md-6 mb-4 portfolio-item genie-logiciel">
+              <div class="portfolio-card">
+                  <div class="portfolio-img">
+                      <img src="/api/placeholder/400/300" alt="Application mobile" class="img-fluid">
+                      <div class="portfolio-overlay">
+                          <div class="portfolio-overlay-content">
+                              <a href="#portfolioModal6" data-bs-toggle="modal" class="portfolio-icon">
+                                  <i class="fas fa-plus"></i>
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="portfolio-info">
+                      <h4>Application mobile</h4>
+                      <p class="category">Génie Logiciel</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Show More Button -->
+      <div class="row mt-4">
+          <div class="col-12 text-center">
+              <button class="btn btn-custom" id="load-more">Voir plus de projets</button>
+          </div>
+      </div>
+  </div>
+</section>
+
+<!-- Project Stats Section -->
+<section id="project-stats" class="py-5 bg-light">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Cartographie de nos Réalisations</h2>
+              <p class="lead">Notre expertise en chiffres</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-3 col-6">
+              <div class="stats-item text-center">
+                  <div class="stats-icon">
+                      <i class="fas fa-project-diagram"></i>
+                  </div>
+                  <h3 class="counter">150</h3>
+                  <p>Projets Réalisés</p>
+              </div>
+          </div>
+          <div class="col-md-3 col-6">
+              <div class="stats-item text-center">
+                  <div class="stats-icon">
+                      <i class="fas fa-users"></i>
+                  </div>
+                  <h3 class="counter">85</h3>
+                  <p>Clients Satisfaits</p>
+              </div>
+          </div>
+          <div class="col-md-3 col-6">
+              <div class="stats-item text-center">
+                  <div class="stats-icon">
+                      <i class="fas fa-globe"></i>
+                  </div>
+                  <h3 class="counter">12</h3>
+                  <p>Pays Couverts</p>
+              </div>
+          </div>
+          <div class="col-md-3 col-6">
+              <div class="stats-item text-center">
+                  <div class="stats-icon">
+                      <i class="fas fa-award"></i>
+                  </div>
+                  <h3 class="counter">18</h3>
+                  <p>Prix d'Innovation</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<!-- Testimonial Section -->
+<section id="testimonials" class="py-5">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 text-center mb-5">
+              <h2 class="section-center-title">Ce que disent nos clients</h2>
+              <p class="lead">Témoignages de réussite de projets</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+              <div id="testimonial-carousel" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                      <div class="carousel-item active">
+                          <div class="testimonial-item text-center">
+                              <div class="testimonial-img">
+                                  <img src="/api/placeholder/100/100" alt="Client 1" class="img-fluid rounded-circle">
+                              </div>
+                              <div class="testimonial-content">
+                                  <p class="testimonial-text">"L'équipe de Logo Services a transformé notre infrastructure numérique avec professionnalisme et efficacité. Leur solution sur mesure a permis d'accroître notre productivité de 30%."</p>
+                                  <h5>Jean Dupont</h5>
+                                  <p class="client-position">Directeur IT, Entreprise Alpha</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <div class="testimonial-item text-center">
+                              <div class="testimonial-img">
+                                  <img src="/api/placeholder/100/100" alt="Client 2" class="img-fluid rounded-circle">
+                              </div>
+                              <div class="testimonial-content">
+                                  <p class="testimonial-text">"Le système de numérisation de documents mis en place par Logo Services nous a permis de gagner un temps considérable. Leur expertise technique et leur capacité d'écoute sont remarquables."</p>
+                                  <h5>Marie Lambert</h5>
+                                  <p class="client-position">Responsable Administrative, Société Beta</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <div class="testimonial-item text-center">
+                              <div class="testimonial-img">
+                                  <img src="/api/placeholder/100/100" alt="Client 3" class="img-fluid rounded-circle">
+                              </div>
+                              <div class="testimonial-content">
+                                  <p class="testimonial-text">"Notre collaboration avec Logo Services sur l'implémentation d'une solution d'IA a dépassé toutes nos attentes. Leur approche innovante nous a donné un avantage concurrentiel significatif."</p>
+                                  <h5>Thomas Martin</h5>
+                                  <p class="client-position">CEO, Startup Gamma</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#testimonial-carousel" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Précédent</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#testimonial-carousel" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Suivant</span>
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<!-- Portfolio Modals -->
+<!-- Modal 1 -->
+<div class="modal fade portfolio-modal" id="portfolioModal1" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Application de gestion</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-md-6">
+                      <img src="/api/placeholder/500/400" alt="Application de gestion" class="img-fluid">
+                  </div>
+                  <div class="col-md-6">
+                      <h4>Détails du projet</h4>
+                      <p><strong>Client:</strong> Entreprise de distribution</p>
+                      <p><strong>Catégorie:</strong> Génie Logiciel</p>
+                      <p><strong>Date:</strong> Janvier 2023</p>
+                      <p><strong>Défi:</strong> Optimiser la gestion des stocks et les processus logistiques.</p>
+                      <p><strong>Solution:</strong> Développement d'une application sur mesure intégrant suivi en temps réel, automatisation des commandes et analytics avancés.</p>
+                      <p><strong>Résultats:</strong> Réduction de 25% des coûts de stockage et amélioration de 40% de la rapidité de traitement des commandes.</p>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-custom">Demander une solution similaire</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Add other modals in the same format -->
+
+<!-- Custom CSS for the portfolio section -->
+<style>
+  /* Colors from the logo */
+  :root {
+    --logo-green: #8DC63F;
+    --logo-blue: #322770;
+  }
+  
+  /* Custom button styling */
+  .btn-custom {
+    background-color: var(--logo-green);
+    border-color: var(--logo-green);
+    color: white;
+  }
+  
+  .btn-custom:hover, .btn-custom:focus {
+    background-color: #7ab52f;
+    border-color: #7ab52f;
+    color: white;
+  }
+  
+  .btn-outline-custom {
+    color: var(--logo-blue);
+    border-color: var(--logo-blue);
+  }
+  
+  .btn-outline-custom:hover, .btn-outline-custom:focus, .btn-outline-custom.active {
+    background-color: var(--logo-blue);
+    color: white;
+  }
+  
+  /* Section titles */
+  .section-center-title {
+    color: var(--logo-blue);
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .section-center-title:after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 3px;
+    background-color: var(--logo-green);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Portfolio items */
+  .portfolio-card {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .portfolio-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .portfolio-img {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .portfolio-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(141, 198, 63, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .portfolio-img:hover .portfolio-overlay {
+    opacity: 1;
+  }
+  
+  .portfolio-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--logo-blue);
+    font-size: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .portfolio-icon:hover {
+    background-color: var(--logo-blue);
+    color: white;
+  }
+  
+  .portfolio-info {
+    padding: 20px;
+    background-color: white;
+  }
+  
+  .portfolio-info h4 {
+    margin-bottom: 5px;
+    color: var(--logo-blue);
+  }
+  
+  .portfolio-info .category {
+    color: var(--logo-green);
+    font-weight: 500;
+  }
+  
+  /* Stats section */
+  .stats-item {
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .stats-icon {
+    font-size: 30px;
+    color: var(--logo-green);
+    margin-bottom: 15px;
+  }
+  
+  .counter {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--logo-blue);
+    margin-bottom: 10px;
+  }
+  
+  /* Testimonials */
+  .testimonial-item {
+    padding: 30px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .testimonial-img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border: 5px solid var(--logo-green);
+  }
+  
+  .testimonial-text {
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .client-position {
+    color: var(--logo-green);
+  }
+  
+  /* Modal customization */
+  .portfolio-modal .modal-title {
+    color: var(--logo-blue);
+  }
+</style>
+
+<!-- Additional JS for portfolio filtering and counters -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Portfolio filtering
+    const filterButtons = document.querySelectorAll('.portfolio-filter button');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to current button
+        this.classList.add('active');
+        
+        const filterValue = this.getAttribute('data-filter');
+        
+        portfolioItems.forEach(item => {
+          if (filterValue === '*') {
+            item.style.display = 'block';
+          } else if (item.classList.contains(filterValue.substring(1))) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+    
+    // Counter animation
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target;
+          const target = parseInt(counter.innerText);
+          let count = 0;
+          
+          const updateCount = () => {
+            const increment = target / speed;
+            
+            if (count < target) {
+              count += increment;
+              counter.innerText = Math.ceil(count);
+              setTimeout(updateCount, 1);
+            } else {
+              counter.innerText = target;
+            }
+          };
+          
+          updateCount();
+          counterObserver.unobserve(counter);
+        }
+      });
+    });
+    
+    counters.forEach(counter => {
+      counterObserver.observe(counter);
+    });
+  });
+</script>
+{% endblock content %}

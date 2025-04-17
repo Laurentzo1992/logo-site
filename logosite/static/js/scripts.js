@@ -3,10 +3,10 @@
             particlesJS('particles-js', {
                 "particles": {
                     "number": {
-                        "value": 800,
+                        "value": 100,
                         "density": {
                             "enable": true,
-                            "value_area": 800
+                            "value_area": 100
                         }
                     },
                     "color": {
@@ -134,4 +134,16 @@
             // Déclencher l'animation au chargement et au défilement
             window.addEventListener('load', animateOnScroll);
             window.addEventListener('scroll', animateOnScroll);
+
+
+            // Initialize the carousel with auto-slide every 3 seconds
+            var partnerCarousel = new bootstrap.Carousel(document.getElementById('partner-carousel'), {
+                interval: 3000,
+                wrap: true
+            });
+      
         });
+
+
+
+            

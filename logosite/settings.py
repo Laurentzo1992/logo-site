@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Gestion de log 
-
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -131,7 +131,7 @@ LOGGING = {
         },
     },
 }
-
+"""
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

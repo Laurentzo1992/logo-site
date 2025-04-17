@@ -9,6 +9,6 @@ urlpatterns = [
 	path('', include('siteweb.urls')),
     path('', include('about.urls')),
     path('', include('blog.urls')),
-    path('', include('catalog.urls')),
+    path('catalog', include('catalog.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
