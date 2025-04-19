@@ -1,6 +1,7 @@
-
 from pathlib import Path
 import  os
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,8 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-%@ukojo0)c$w*0q2o)(+pxkq-3y!snt*)7&5w1$j7skpjjepb$"
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -105,33 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Gestion de log 
-"""
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'technique.log',  
-        },
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        },
-        'django.security.csrf': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        },
-    },
-}
-"""
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -173,3 +148,36 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LIBELLE_FILE_DIR = BASE_DIR / 'libelle'
+
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'width': 1200,
+    'selector': 'textarea',
+    'theme': 'silver',
+    'plugins': 'link image',
+    'images_file_types': 'jpg,svg,webp'
+}
+
+TINYMCE_JS_URL = os.path.join(BASE_DIR, "logosite/static/tinymce/js/tinymce/tinymce.min.js")
+
+
+
+# Production mode
+
+# TINYMCE_JS_URL = os.path.join(BASE_DIR, "static/tinymce/js/tinymce/tinymce.min.js")
+TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/n5qu4r62gjp1qb6xssmi5fox13hr8nwaq4dcf2sc969zf3bs/tinymce/7/tinymce.min.js'
+TINYMCE_COMPRESSOR = False
+
+
+
+# Email setting
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'ssl0.ovh.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

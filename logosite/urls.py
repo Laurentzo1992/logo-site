@@ -9,6 +9,7 @@ urlpatterns = [
 	path('', include('siteweb.urls')),
     path('', include('about.urls')),
     path('', include('blog.urls')),
-    path('catalog', include('catalog.urls')),
+    path('', include('catalog.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

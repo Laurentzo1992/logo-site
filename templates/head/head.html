@@ -1,21 +1,20 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{% url 'index' %}">
-            <!-- SVG Logo basé sur le logo de référence -->
-            <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- SVG Logo avec dimensions explicites -->
+            <svg width="200" height="60" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
                 <!-- Green swoosh on top -->
                 <path d="M10,40 C60,10 150,20 220,35 C280,45 350,40 390,30" stroke="#7BC142" stroke-width="6" fill="none" />
-                  
+                 
                 <!-- Blue fish/swoosh on bottom -->
-                <path d="M30,70 C80,90 150,95 200,80 C260,65 310,75 360,70" stroke="#263C82" stroke-width="3" fill="none" />
-                  
+                <path d="M30,70 C80,90 150,95 200,80 C260,65 310,75 360,70" stroke="#FFFFFF" stroke-width="4" fill="none" />
+                 
                 <!-- Main text -->
-                <text x="70" y="65" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#263C82">LOGO SERVICES</text>
-                  
+                <text x="70" y="65" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFFFFF">LOGO SERVICES</text>
+                 
                 <!-- Tagline -->
-                <text x="130" y="85" font-family="Arial, sans-serif" font-size="12" font-style="italic" fill="#7BC142">L'expertise informatique à votre service</text>
+                <text x="110" y="85" font-family="Arial, sans-serif" font-size="15" font-style="italic" fill="#7BC142">L'expertise informatique à votre service</text>
             </svg>
-            LOGO SERVICES
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

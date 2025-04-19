@@ -46,11 +46,79 @@
 
 
     <!-- Footer -->
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+    <audio id="toast-sound" src="{% static 'images/alerte/alerte.mp3' %}" preload="auto"></audio>
     {% include "foot/foot.html" %}
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
+
+
+    <script> 
+        function showToast(message, type = 'success') {
+            const toastId = 'toast-' + Date.now();
+            const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
+                </div>
+            </div>`;
+    
+            const container = document.getElementById('toast-container');
+            container.insertAdjacentHTML('beforeend', toastHtml);
+    
+            const toastEl = document.getElementById(toastId);
+            const bsToast = new bootstrap.Toast(toastEl);
+            bsToast.show();
+    
+            const sound = document.getElementById('toast-sound');
+            if (sound) sound.play();
+    
+            toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+        }
+        
+        document.getElementById('subscribe-btn').addEventListener('click', function () {
+            const emailInput = document.getElementById('newsletter-email');
+            const email = emailInput.value.trim();
+    
+            if (!validateEmail(email)) {
+                showToast("Veuillez entrer un email valide.", 'danger');
+                return;
+            }
+            
+            fetch('/api/subscribe_newsletter/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showToast(result.message, 'success');
+                    emailInput.value = '';
+                } else {
+                    showToast(result.message, 'danger');
+                }
+            })
+            .catch(error => {
+                showToast("Erreur réseau : " + error, 'danger');
+            });
+        });
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email.toLowerCase());
+        }
+        
+    </script>
+
+    
 </body>
 </html>
