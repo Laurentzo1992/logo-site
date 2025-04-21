@@ -1,3 +1,6 @@
 from django.contrib import admin
+from catalog.models import Categorie_Projet, Projet
 
-# Register your models here.
+
+admin.site.register(Categorie_Projet)
+admin.site.register(Projet)

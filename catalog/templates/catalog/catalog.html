@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <!-- Portfolio Section -->
 <section id="portfolio" class="py-5">
@@ -28,126 +28,27 @@
       <!-- Portfolio Grid -->
       <div class="row portfolio-container">
           <!-- Projet 1 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item genie-logiciel">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Application de gestion" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal1" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Application de gestion</h4>
-                      <p class="category">Génie Logiciel</p>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Projet 2 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item numerisation">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Système GED" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal2" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Système GED</h4>
-                      <p class="category">Numérisation</p>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Projet 3 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item reseaux">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Infrastructure Cloud" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal3" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Infrastructure Cloud</h4>
-                      <p class="category">Réseaux et Systèmes</p>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Projet 4 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item securite">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Audit de sécurité" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal4" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Audit de sécurité</h4>
-                      <p class="category">Sécurité Informatique</p>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Projet 5 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item ia">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Chatbot IA" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal5" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Chatbot IA</h4>
-                      <p class="category">Intelligence Artificielle</p>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Projet 6 -->
-          <div class="col-lg-4 col-md-6 mb-4 portfolio-item genie-logiciel">
-              <div class="portfolio-card">
-                  <div class="portfolio-img">
-                      <img src="/api/placeholder/400/300" alt="Application mobile" class="img-fluid">
-                      <div class="portfolio-overlay">
-                          <div class="portfolio-overlay-content">
-                              <a href="#portfolioModal6" data-bs-toggle="modal" class="portfolio-icon">
-                                  <i class="fas fa-plus"></i>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="portfolio-info">
-                      <h4>Application mobile</h4>
-                      <p class="category">Génie Logiciel</p>
-                  </div>
-              </div>
-          </div>
-      </div>
-      
+          {% for projet in projets %}
+        <div class="col-lg-4 col-md-6 mb-4 portfolio-item {{ projet.nom_client }}">
+            <div class="portfolio-card">
+                <div class="portfolio-img">
+                    <img src="{% static 'images/app_static/foldes.svg' %}" alt="{{ projet.categorie.libelle }}" class="img-fluid">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-overlay-content">
+                            <a href="#portfolioModal{{projet.id}}" data-bs-toggle="modal" class="portfolio-icon">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-info">
+                    <h4>{{ projet.intitule|safe}}</h4>
+                    <p class="category">{{ projet.categorie.nom }}</p>
+                </div>
+            </div>
+        </div>
+        {% include "catalog/modal.html" %}
+        {% endfor %}
       <!-- Show More Button -->
       <div class="row mt-4">
           <div class="col-12 text-center">
@@ -172,7 +73,7 @@
                   <div class="stats-icon">
                       <i class="fas fa-project-diagram"></i>
                   </div>
-                  <h3 class="counter">150</h3>
+                  <h3 class="counter">20+</h3>
                   <p>Projets Réalisés</p>
               </div>
           </div>
@@ -181,7 +82,7 @@
                   <div class="stats-icon">
                       <i class="fas fa-users"></i>
                   </div>
-                  <h3 class="counter">85</h3>
+                  <h3 class="counter">100+</h3>
                   <p>Clients Satisfaits</p>
               </div>
           </div>
@@ -190,7 +91,7 @@
                   <div class="stats-icon">
                       <i class="fas fa-globe"></i>
                   </div>
-                  <h3 class="counter">12</h3>
+                  <h3 class="counter">1</h3>
                   <p>Pays Couverts</p>
               </div>
           </div>
@@ -199,7 +100,7 @@
                   <div class="stats-icon">
                       <i class="fas fa-award"></i>
                   </div>
-                  <h3 class="counter">18</h3>
+                  <h3 class="counter">2</h3>
                   <p>Prix d'Innovation</p>
               </div>
           </div>
@@ -208,101 +109,11 @@
 </section>
 
 <!-- Testimonial Section -->
-<section id="testimonials" class="py-5">
-  <div class="container">
-      <div class="row">
-          <div class="col-12 text-center mb-5">
-              <h2 class="section-center-title">Ce que disent nos clients</h2>
-              <p class="lead">Témoignages de réussite de projets</p>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-12">
-              <div id="testimonial-carousel" class="carousel slide" data-bs-ride="carousel">
-                  <div class="carousel-inner">
-                      <div class="carousel-item active">
-                          <div class="testimonial-item text-center">
-                              <div class="testimonial-img">
-                                  <img src="/api/placeholder/100/100" alt="Client 1" class="img-fluid rounded-circle">
-                              </div>
-                              <div class="testimonial-content">
-                                  <p class="testimonial-text">"L'équipe de Logo Services a transformé notre infrastructure numérique avec professionnalisme et efficacité. Leur solution sur mesure a permis d'accroître notre productivité de 30%."</p>
-                                  <h5>Jean Dupont</h5>
-                                  <p class="client-position">Directeur IT, Entreprise Alpha</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="carousel-item">
-                          <div class="testimonial-item text-center">
-                              <div class="testimonial-img">
-                                  <img src="/api/placeholder/100/100" alt="Client 2" class="img-fluid rounded-circle">
-                              </div>
-                              <div class="testimonial-content">
-                                  <p class="testimonial-text">"Le système de numérisation de documents mis en place par Logo Services nous a permis de gagner un temps considérable. Leur expertise technique et leur capacité d'écoute sont remarquables."</p>
-                                  <h5>Marie Lambert</h5>
-                                  <p class="client-position">Responsable Administrative, Société Beta</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="carousel-item">
-                          <div class="testimonial-item text-center">
-                              <div class="testimonial-img">
-                                  <img src="/api/placeholder/100/100" alt="Client 3" class="img-fluid rounded-circle">
-                              </div>
-                              <div class="testimonial-content">
-                                  <p class="testimonial-text">"Notre collaboration avec Logo Services sur l'implémentation d'une solution d'IA a dépassé toutes nos attentes. Leur approche innovante nous a donné un avantage concurrentiel significatif."</p>
-                                  <h5>Thomas Martin</h5>
-                                  <p class="client-position">CEO, Startup Gamma</p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <button class="carousel-control-prev" type="button" data-bs-target="#testimonial-carousel" data-bs-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Précédent</span>
-                  </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#testimonial-carousel" data-bs-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="visually-hidden">Suivant</span>
-                  </button>
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
+
+{% comment %} {% include "catalog/temoignage.html" %} {% endcomment %}
 
 <!-- Portfolio Modals -->
-<!-- Modal 1 -->
-<div class="modal fade portfolio-modal" id="portfolioModal1" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Application de gestion</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <div class="row">
-                  <div class="col-md-6">
-                      <img src="/api/placeholder/500/400" alt="Application de gestion" class="img-fluid">
-                  </div>
-                  <div class="col-md-6">
-                      <h4>Détails du projet</h4>
-                      <p><strong>Client:</strong> Entreprise de distribution</p>
-                      <p><strong>Catégorie:</strong> Génie Logiciel</p>
-                      <p><strong>Date:</strong> Janvier 2023</p>
-                      <p><strong>Défi:</strong> Optimiser la gestion des stocks et les processus logistiques.</p>
-                      <p><strong>Solution:</strong> Développement d'une application sur mesure intégrant suivi en temps réel, automatisation des commandes et analytics avancés.</p>
-                      <p><strong>Résultats:</strong> Réduction de 25% des coûts de stockage et amélioration de 40% de la rapidité de traitement des commandes.</p>
-                  </div>
-              </div>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-              <button type="button" class="btn btn-custom">Demander une solution similaire</button>
-          </div>
-      </div>
-  </div>
-</div>
+
 
 <!-- Add other modals in the same format -->
 

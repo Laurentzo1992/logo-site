@@ -1,0 +1,23 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g stroke-width="6" fill="none">
+    <!-- Folder in Green -->
+    <path d="M30,40 L30,160 L100,160 L100,40 Z" stroke="#4CAF50" fill="#81C784" />
+    <path d="M30,40 L100,40" stroke="#4CAF50" />
+    <path d="M40,160 L40,40" stroke="#4CAF50" />
+    
+    <!-- Document in Navy Blue -->
+    <path d="M85,50 L170,50 L170,160 L85,160 Z" stroke="#0D47A1" fill="#1976D2" />
+    
+    <!-- Document Lines in Navy Blue -->
+    <path d="M120,70 L155,70" stroke="#0D47A1" />
+    <path d="M120,90 L155,90" stroke="#0D47A1" />
+    <path d="M120,110 L155,110" stroke="#0D47A1" />
+    <path d="M120,130 L155,130" stroke="#0D47A1" />
+    <path d="M120,150 L155,150" stroke="#0D47A1" />
+    
+    <!-- Tab and Details in Navy Blue -->
+    <path d="M85,80 L100,80" stroke="#0D47A1" />
+    <path d="M85,120 L100,120" stroke="#0D47A1" />
+    <path d="M90,90 C95,95 95,105 90,110" stroke="#0D47A1" />
+  </g>
+</svg>

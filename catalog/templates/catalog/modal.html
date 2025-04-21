@@ -1,0 +1,31 @@
+<!-- Modal 1 -->
+<div class="modal fade portfolio-modal" id="portfolioModal{{projet.id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{projet.categorie.libelle}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk4voxtSXi-DDpbsngUWe8WJ7K47Y5Ir0CjQ&s" alt="Application de gestion" class="img-fluid">
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Détails du projet</h4>
+                        <p><strong>Client:</strong> {{projet.nom_client}}</p>
+                        <p><strong>Catégorie:</strong> {{projet.categorie.libelle}}</p>
+                        <p><strong>Date:</strong> {{projet.annee_execution}}</p>
+                        <p><strong>Défi:</strong> {{projet.defis|safe}}</p>
+                        <p><strong>Solution:</strong> {{projet.solution|safe}}.</p>
+                        <p><strong>Résultats:</strong> {{projet.resultat|safe}}.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-custom">Demander une solution similaire</button>
+            </div>
+        </div>
+    </div>
+  </div>
