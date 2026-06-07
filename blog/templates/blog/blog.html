@@ -1,0 +1,548 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block particules %} {% endblock particules %}
+
+
+{% block content %}
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#2B2873;--p2:#1e1c52;--p3:#3d3aa8;
+  --g:#7BC142;--g2:#5e9730;--g3:#9dd465;
+  --lg:#f8f9fa;--mg:#e9ecef;--dg:#dee2e6;
+  --white:#fff;--text:#1a1a2e;--muted:#6c757d;
+  --r:12px;--r2:8px;
+}
+body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+
+/* HERO */
+.hero{
+  background:var(--p);
+  padding:4rem 2.5rem 3.5rem;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+}
+.hero-bg-circle1{
+  position:absolute;right:-80px;top:-80px;
+  width:380px;height:380px;border-radius:50%;
+  background:radial-gradient(circle,rgba(123,193,66,.14) 0%,transparent 70%);
+}
+.hero-bg-circle2{
+  position:absolute;left:30%;bottom:-60px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(61,58,168,.5) 0%,transparent 70%);
+}
+.hero-bg-grid{
+  position:absolute;inset:0;opacity:.04;
+  background-image:linear-gradient(rgba(255,255,255,.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.8) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.hero-inner{position:relative;max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(123,193,66,.12);border:1px solid rgba(123,193,66,.3);
+  color:var(--g3);font-size:.7rem;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;padding:.3rem .9rem;border-radius:20px;margin-bottom:1.25rem;
+}
+.badge-pulse{width:7px;height:7px;background:var(--g);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{font-size:2.4rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:1rem}
+.hero h1 em{color:var(--g);font-style:normal;display:block}
+.hero-sub{color:rgba(255,255,255,.6);font-size:.95rem;line-height:1.75;margin-bottom:1.75rem}
+.hero-search{
+  display:flex;background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.15);border-radius:10px;overflow:hidden;
+  backdrop-filter:blur(8px);
+}
+.hero-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:.75rem 1.1rem;font-size:.88rem}
+.hero-search input::placeholder{color:rgba(255,255,255,.35)}
+.hero-search button{
+  background:var(--g);color:#fff;border:none;
+  padding:.75rem 1.35rem;font-weight:700;font-size:.82rem;cursor:pointer;
+  transition:background .18s;white-space:nowrap;
+}
+.hero-search button:hover{background:var(--g2)}
+.hero-stats{display:flex;gap:1.75rem;margin-top:1.5rem}
+.hero-stat-n{font-size:1.5rem;font-weight:800;color:#fff}
+.hero-stat-l{font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px}
+
+/* Featured card (right side of hero) */
+.hero-card{
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:var(--r);padding:1.5rem;
+  backdrop-filter:blur(8px);
+}
+.hc-label{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(123,193,66,.15);color:var(--g3);
+  font-size:.68rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  padding:.22rem .7rem;border-radius:4px;margin-bottom:1rem;
+}
+.hc-icon-wrap{
+  height:120px;background:var(--p3);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;margin-bottom:1.25rem;position:relative;overflow:hidden;
+}
+.hc-icon-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 70% 30%,rgba(123,193,66,.2),transparent 60%);
+}
+.hc-card-title{font-size:1rem;font-weight:700;color:#fff;line-height:1.45;margin-bottom:.75rem}
+.hc-meta{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,255,.45)}
+.hc-av{width:24px;height:24px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#fff;flex-shrink:0}
+.sep{margin:0 .1rem}
+.hc-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--g);color:#fff;font-size:.8rem;font-weight:700;
+  padding:.5rem 1.1rem;border-radius:7px;text-decoration:none;margin-top:1.1rem;
+  transition:background .18s;
+}
+.hc-btn:hover{background:var(--g2)}
+.hc-btn svg{transition:transform .2s}
+.hc-btn:hover svg{transform:translateX(3px)}
+
+/* CATS */
+.cats-bar{
+  background:var(--white);
+  border-bottom:1.5px solid var(--dg);
+  padding:.85rem 2.5rem;
+  display:flex;gap:.5rem;overflow-x:auto;
+  position:sticky;top:64px;z-index:100;
+}
+.cats-bar::-webkit-scrollbar{display:none}
+.cat{
+  background:transparent;border:1.5px solid var(--mg);
+  color:var(--muted);padding:.32rem .9rem;border-radius:20px;
+  font-size:.75rem;font-weight:500;cursor:pointer;white-space:nowrap;
+  transition:all .18s;font-family:'Inter',sans-serif;
+}
+.cat:hover{border-color:var(--p);color:var(--p)}
+.cat.on{background:var(--p);border-color:var(--p);color:#fff;font-weight:600}
+.cat-count{
+  background:rgba(255,255,255,.25);color:inherit;
+  font-size:.65rem;font-weight:700;
+  padding:.1rem .35rem;border-radius:10px;margin-left:4px;
+}
+.cat.on .cat-count{background:rgba(255,255,255,.2)}
+
+/* MAIN LAYOUT */
+.page{max-width:1160px;margin:0 auto;padding:2.5rem 2.5rem;display:grid;grid-template-columns:1fr 300px;gap:2.5rem}
+
+/* ARTICLE GRID */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+
+/* CARD */
+.card{
+  background:var(--white);border:1.5px solid var(--mg);
+  border-radius:var(--r);overflow:hidden;
+  transition:transform .22s,border-color .22s,box-shadow .22s;
+  display:flex;flex-direction:column;
+}
+.card:hover{transform:translateY(-4px);border-color:var(--g);box-shadow:0 8px 32px rgba(43,40,115,.1)}
+.card-thumb{
+  height:150px;display:flex;align-items:center;justify-content:center;
+  font-size:2.75rem;position:relative;overflow:hidden;flex-shrink:0;
+}
+.card-thumb .tc-line{
+  position:absolute;bottom:0;left:0;right:0;
+  height:3px;background:linear-gradient(90deg,var(--g),var(--p));
+}
+.t-blue{background:#edf2ff}
+.t-green{background:#f0fae4}
+.t-amber{background:#fff8e1}
+.t-violet{background:#f3efff}
+.t-teal{background:#e6faf5}
+.t-rose{background:#fff0f3}
+.card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
+.card-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(43,40,115,.07);color:var(--p);
+  font-size:.67rem;font-weight:700;padding:.2rem .55rem;
+  border-radius:4px;margin-bottom:.65rem;letter-spacing:.4px;text-transform:uppercase;
+  width:fit-content;
+}
+.card-tag-dot{width:5px;height:5px;background:var(--g);border-radius:50%}
+.card h3{font-size:.93rem;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:.5rem}
+.card p{color:var(--muted);font-size:.82rem;line-height:1.65;margin-bottom:1rem;flex:1}
+.card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.75rem;border-top:1.5px solid var(--mg);margin-top:auto}
+.auth{display:flex;align-items:center;gap:.45rem;font-size:.75rem;color:var(--muted)}
+.av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#fff;flex-shrink:0}
+.rt{display:flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--muted)}
+.rt svg{color:var(--g)}
+.more-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--p);font-size:.78rem;font-weight:600;
+  background:rgba(43,40,115,.06);padding:.3rem .7rem;
+  border-radius:6px;text-decoration:none;margin-top:.85rem;width:fit-content;
+  transition:background .18s;
+}
+.more-btn:hover{background:rgba(43,40,115,.12)}
+.more-btn svg{transition:transform .18s}
+.more-btn:hover svg{transform:translateX(2px)}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;align-items:center;gap:.4rem;margin-top:2rem}
+.pg{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--white);border:1.5px solid var(--mg);
+  color:var(--muted);font-size:.82rem;font-weight:500;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;
+}
+.pg:hover{border-color:var(--p);color:var(--p)}
+.pg.on{background:var(--p);border-color:var(--p);color:#fff;font-weight:700}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:1.35rem}
+.sw{background:var(--white);border:1.5px solid var(--mg);border-radius:var(--r);padding:1.25rem;overflow:hidden}
+.sw-head{
+  font-size:.7rem;font-weight:700;color:var(--p);
+  text-transform:uppercase;letter-spacing:1.2px;
+  margin-bottom:1rem;padding-bottom:.65rem;
+  border-bottom:2px solid var(--g);display:flex;align-items:center;gap:6px;
+}
+.sw-head svg{color:var(--g)}
+
+/* Stats widget */
+.stats-g{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.stat-box{
+  background:var(--lg);border:1.5px solid var(--mg);border-radius:8px;
+  padding:.85rem .75rem;text-align:center;
+}
+.stat-n{font-size:1.45rem;font-weight:800;color:var(--p)}
+.stat-l{font-size:.68rem;color:var(--muted);margin-top:2px;font-weight:500}
+
+/* Popular */
+.pop-item{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--mg)}
+.pop-item:last-child{border-bottom:none;padding-bottom:0}
+.rank{
+  width:22px;height:22px;border-radius:5px;
+  background:rgba(43,40,115,.07);color:var(--p);
+  font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.rank.first{background:var(--g);color:#fff}
+.pop-item p{font-size:.8rem;color:var(--text);font-weight:500;line-height:1.4}
+.pop-item span{font-size:.7rem;color:var(--muted);display:block;margin-top:2px}
+
+/* Recent */
+.rp{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--mg)}
+.rp:last-child{border-bottom:none;padding-bottom:0}
+.ri{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.ri.blue{background:#edf2ff} .ri.green{background:#f0fae4} .ri.amber{background:#fff8e1} .ri.violet{background:#f3efff}
+.rp h4{font-size:.8rem;color:var(--text);font-weight:500;line-height:1.35;margin-bottom:2px}
+.rp span{font-size:.7rem;color:var(--muted)}
+
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag-pill{
+  background:var(--lg);border:1.5px solid var(--mg);
+  color:var(--muted);font-size:.73rem;padding:.25rem .65rem;
+  border-radius:20px;text-decoration:none;font-weight:500;transition:all .18s;
+}
+.tag-pill:hover{border-color:var(--g);color:var(--g2);background:rgba(123,193,66,.06)}
+
+@media(max-width:960px){
+  .page{grid-template-columns:1fr}
+  .hero-inner{grid-template-columns:1fr}
+  .hero-card{display:none}
+  .grid{grid-template-columns:1fr}
+  nav{padding:0 1.25rem}
+  .nav-links,.nav-search{display:none}
+}
+</style>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-circle1"></div>
+    <div class="hero-bg-circle2"></div>
+    <div class="hero-bg-grid"></div>
+  </div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><div class="badge-pulse"></div>Actualités &amp; Insights</div>
+      <h1>Restez à la pointe <em>de la tech</em></h1>
+      <p class="hero-sub">Veille technologique, conseils d'experts et actualités sur l'IA, la cybersécurité, les réseaux et la transformation digitale.</p>
+      <div class="hero-search">
+        <input type="text" placeholder="Rechercher un article, une technologie…"/>
+        <button>Rechercher</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-n">128</div><div class="hero-stat-l">Articles publiés</div></div>
+        <div><div class="hero-stat-n">4.2k</div><div class="hero-stat-l">Lecteurs / mois</div></div>
+        <div><div class="hero-stat-n">12</div><div class="hero-stat-l">Experts auteurs</div></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hc-label">
+        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#7BC142"/></svg>
+        À la une
+      </div>
+      <div class="hc-icon-wrap">🤖</div>
+      <h3 class="hc-card-title">Comment l'IA transforme les infrastructures réseau en 2025</h3>
+      <div class="hc-meta">
+        <div class="hc-av">KD</div>
+        <span>Karim Djelil</span>
+        <span class="sep">·</span>
+        <span>12 mai 2025</span>
+        <span class="sep">·</span>
+        <span>8 min</span>
+      </div>
+      <a href="#" class="hc-btn">
+        Lire l'article
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CATS -->
+<div class="cats-bar">
+  <button class="cat on">Tous <span class="cat-count">128</span></button>
+  <button class="cat">Intelligence Artificielle <span class="cat-count">24</span></button>
+  <button class="cat">Génie Logiciel <span class="cat-count">31</span></button>
+  <button class="cat">Réseaux &amp; Systèmes <span class="cat-count">19</span></button>
+  <button class="cat">Sécurité Informatique <span class="cat-count">22</span></button>
+  <button class="cat">Numérisation <span class="cat-count">15</span></button>
+  <button class="cat">Formation <span class="cat-count">17</span></button>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+  <main>
+    <div class="grid">
+
+      <!-- Card 1 -->
+      <article class="card">
+        <div class="card-thumb t-blue">🔐<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Sécurité Informatique</span>
+          <h3>Zero Trust Architecture : guide complet pour les entreprises africaines</h3>
+          <p>Le modèle Zero Trust redéfinit la cybersécurité. Nous décryptons son implémentation étape par étape pour les PME.</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#2B2873">AS</div>
+              <span>Amir Samir</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              6 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card">
+        <div class="card-thumb t-teal">☁️<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Réseaux &amp; Systèmes</span>
+          <h3>Migration cloud hybride : retour d'expérience sur 5 projets réels</h3>
+          <p>Quels défis lors d'une migration hybride ? Nos ingénieurs partagent leurs leçons apprises sur le terrain.</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#5e9730">MB</div>
+              <span>Mohamed Brahim</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              10 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card">
+        <div class="card-thumb t-amber">📄<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Numérisation</span>
+          <h3>Dématérialisation des archives : bonnes pratiques et outils 2025</h3>
+          <p>Comment choisir la bonne solution d'archivage numérique ? Tour d'horizon des standards actuels.</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#c97a00">FZ</div>
+              <span>Fatima Zitouni</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              7 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card">
+        <div class="card-thumb t-violet">🎓<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Formation</span>
+          <h3>Former vos équipes IT : pourquoi les certifications ne suffisent plus</h3>
+          <p>Les formations pratiques et contextualisées surpassent les certifications classiques. Nos recommandations 2025.</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#6d28d9">RH</div>
+              <span>Rania Hamdi</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              5 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="card">
+        <div class="card-thumb t-green">🤖<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Intelligence Artificielle</span>
+          <h3>LLM et sécurité : les nouveaux vecteurs d'attaque à surveiller</h3>
+          <p>Les modèles de langage ouvrent de nouvelles surfaces d'attaque. Comment sécuriser vos déploiements IA ?</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#2B2873">KD</div>
+              <span>Karim Djelil</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              9 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card">
+        <div class="card-thumb t-rose">💻<div class="tc-line"></div></div>
+        <div class="card-body">
+          <span class="card-tag"><div class="card-tag-dot"></div>Génie Logiciel</span>
+          <h3>Microservices : retour sur 3 ans d'expérience en production</h3>
+          <p>Ce que l'on apprend en faisant tourner des microservices en production pendant 3 ans. Les erreurs à éviter.</p>
+          <div class="card-footer">
+            <div class="auth">
+              <div class="av" style="background:#be123c">HT</div>
+              <span>Hichem Tabet</span>
+            </div>
+            <div class="rt">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              11 min
+            </div>
+          </div>
+          <a href="#" class="more-btn">
+            Lire l'article
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="pg">&#8592;</button>
+      <button class="pg on">1</button>
+      <button class="pg">2</button>
+      <button class="pg">3</button>
+      <button class="pg">…</button>
+      <button class="pg">8</button>
+      <button class="pg">&#8594;</button>
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+        Stats du blog
+      </div>
+      <div class="stats-g">
+        <div class="stat-box"><div class="stat-n">128</div><div class="stat-l">Articles</div></div>
+        <div class="stat-box"><div class="stat-n">4.2k</div><div class="stat-l">Lecteurs/mois</div></div>
+        <div class="stat-box"><div class="stat-n">12</div><div class="stat-l">Auteurs</div></div>
+        <div class="stat-box"><div class="stat-n">6</div><div class="stat-l">Catégories</div></div>
+      </div>
+    </div>
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        Articles populaires
+      </div>
+      <div class="pop-item"><div class="rank first">1</div><div><p>LLM et sécurité : les nouveaux vecteurs d'attaque</p><span>3 204 lectures</span></div></div>
+      <div class="pop-item"><div class="rank">2</div><div><p>SD-WAN vs MPLS : quel choix pour votre entreprise ?</p><span>2 841 lectures</span></div></div>
+      <div class="pop-item"><div class="rank">3</div><div><p>Microservices : retour sur 3 ans d'expérience</p><span>2 310 lectures</span></div></div>
+      <div class="pop-item"><div class="rank">4</div><div><p>Data governance : construire votre stratégie</p><span>1 987 lectures</span></div></div>
+    </div>
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Articles récents
+      </div>
+      <div class="rp"><div class="ri blue">🤖</div><div><h4>LLM et sécurité : les nouveaux vecteurs</h4><span>3 juin 2025</span></div></div>
+      <div class="rp"><div class="ri teal">🌐</div><div><h4>SD-WAN vs MPLS : quel choix ?</h4><span>28 mai 2025</span></div></div>
+      <div class="rp"><div class="ri amber">💻</div><div><h4>Microservices en production</h4><span>20 mai 2025</span></div></div>
+      <div class="rp"><div class="ri violet">📊</div><div><h4>Data governance en 5 étapes</h4><span>14 mai 2025</span></div></div>
+    </div>
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        Tags populaires
+      </div>
+      <div class="tags">
+        <a href="#" class="tag-pill">IA</a><a href="#" class="tag-pill">Cybersécurité</a>
+        <a href="#" class="tag-pill">Cloud</a><a href="#" class="tag-pill">Python</a>
+        <a href="#" class="tag-pill">DevOps</a><a href="#" class="tag-pill">5G</a>
+        <a href="#" class="tag-pill">Machine Learning</a><a href="#" class="tag-pill">Docker</a>
+        <a href="#" class="tag-pill">Firewall</a><a href="#" class="tag-pill">Big Data</a>
+        <a href="#" class="tag-pill">ERP</a><a href="#" class="tag-pill">VPN</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+
+<script>
+document.querySelectorAll('.cat').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+}));
+document.querySelectorAll('.pg').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+}));
+</script>
+
+
+{% endblock content %}
