@@ -1,0 +1,3 @@
+logo-services.com, www.logo-services.com {
+	reverse_proxy web:8000
+}

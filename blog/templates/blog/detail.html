@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static blog_extras %}
+
+{% block page_title %}{{ article.title }} - LOGO SERVICES{% endblock page_title %}
+{% block og_title %}{{ article.title }} - LOGO SERVICES{% endblock og_title %}
+{% block twitter_title %}{{ article.title }} - LOGO SERVICES{% endblock twitter_title %}
+{% block page_description %}{{ article.excerpt|truncatechars:160 }}{% endblock page_description %}
+{% block og_description %}{{ article.excerpt|truncatechars:160 }}{% endblock og_description %}
+{% block twitter_description %}{{ article.excerpt|truncatechars:160 }}{% endblock twitter_description %}
+{% block page_image %}{% if article.thumbnail %}https://logo-services.com{{ article.thumbnail.url }}{% else %}{{ block.super }}{% endif %}{% endblock page_image %}
+{% block og_type %}article{% endblock og_type %}
+
+{% block extra_head %}<link href="{% static 'css/blog.css' %}" rel="stylesheet">{% endblock extra_head %}
+
+{% block particules %} {% endblock particules %}
+
+{# Les messages (confirmation/erreur de commentaire) sont affichés juste au-dessus
+   du formulaire, pas en haut de page — l'utilisateur qui poste un commentaire
+   est en bas d'une longue page et ne remonterait jamais assez pour les voir. #}
+{% block messages %}{% endblock messages %}
+
+{% block content %}
+
+<section class="article-hero">
+  <div class="article-hero-inner">
+    <a href="{% url 'blog' %}" class="back-link">&larr; Retour au blog</a>
+    {% if article.category %}<span class="card-tag">{{ article.category.name }}</span>{% endif %}
+    <h1>{{ article.title }}</h1>
+    <div class="article-meta">
+      <div class="av">{% if article.author %}{{ article.author.get_full_name|default:article.author.username|slice:":2"|upper }}{% else %}--{% endif %}</div>
+      <span>{% if article.author %}{{ article.author.get_full_name|default:article.author.username }}{% else %}Équipe LOGO SERVICES{% endif %}</span>
+      <span>·</span>
+      <span>{{ article.published_at|date:"d F Y" }}</span>
+      <span>·</span>
+      <span>{{ article.read_time }} min de lecture</span>
+      <span>·</span>
+      <span>{{ article.views }} vue{{ article.views|pluralize }}</span>
+      {% if article.source_name %}
+      <span>·</span>
+      <span>Veille — source : <a href="{{ article.source_url }}" target="_blank" rel="noopener noreferrer nofollow" style="color:#fff;text-decoration:underline">{{ article.source_name }} ↗</a></span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="page">
+  <main>
+    {% if article.thumbnail %}<img src="{{ article.thumbnail.url }}" alt="{{ article.title }}" class="article-thumb" loading="lazy">{% endif %}
+
+    <div class="article-body">
+      {{ article.content|markdownify }}
+    </div>
+
+    {% if article.tags.all %}
+    <div class="article-tags">
+      {% for tag in article.tags.all %}
+      <a href="{% url 'tag' slug=tag.slug %}" class="tag-pill">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if related %}
+    <div class="related">
+      <h3>Articles similaires</h3>
+      <div class="related-grid">
+        {% for r in related %}
+        <a class="related-card" href="{{ r.get_absolute_url }}">
+          <h4>{{ r.title }}</h4>
+          <span>{{ r.read_time }} min</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% include "blog/partials/comments.html" %}
+  </main>
+
+  <aside class="sidebar">
+    {% if recent_articles %}
+    <div class="sw">
+      <div class="sw-head">Articles récents</div>
+      {% for a in recent_articles %}
+      <a class="rp" href="{{ a.get_absolute_url }}">
+        <div class="ri">{{ a.icon|default:"📰" }}</div>
+        <div><h4>{{ a.title }}</h4><span>{{ a.published_at|date:"d M Y" }}</span></div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </aside>
+</div>
+
+{% endblock content %}

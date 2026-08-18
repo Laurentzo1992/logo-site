@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}{% if active_category %}{{ active_category.name }} - {% endif %}{% if active_tag %}{{ active_tag.name }} - {% endif %}Blog - LOGO SERVICES{% endblock page_title %}
+{% block og_title %}{% if active_category %}{{ active_category.name }} - {% endif %}{% if active_tag %}{{ active_tag.name }} - {% endif %}Blog - LOGO SERVICES{% endblock og_title %}
+{% block twitter_title %}{% if active_category %}{{ active_category.name }} - {% endif %}{% if active_tag %}{{ active_tag.name }} - {% endif %}Blog - LOGO SERVICES{% endblock twitter_title %}
+{% block page_description %}Actualités et veille sur la cybersécurité, l'intelligence artificielle et la transformation digitale, par LOGO SERVICES.{% endblock page_description %}
+{% block og_description %}Actualités et veille sur la cybersécurité, l'intelligence artificielle et la transformation digitale, par LOGO SERVICES.{% endblock og_description %}
+{% block twitter_description %}Actualités et veille sur la cybersécurité, l'intelligence artificielle et la transformation digitale, par LOGO SERVICES.{% endblock twitter_description %}
+
+{% block extra_head %}<link href="{% static 'css/blog.css' %}" rel="stylesheet">{% endblock extra_head %}
+
+{% block particules %} {% endblock particules %}
+
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-circle1"></div>
+    <div class="hero-bg-circle2"></div>
+    <div class="hero-bg-grid"></div>
+  </div>
+  <div class="hero-inner {% if not featured %}no-featured{% endif %}">
+    <div>
+      <div class="hero-badge"><div class="badge-pulse"></div>Actualités &amp; Insights</div>
+      <h1>Restez à la pointe <em>de la tech</em></h1>
+      <p class="hero-sub">Veille technologique, conseils d'experts et actualités sur l'IA, la cybersécurité, les réseaux et la transformation digitale.</p>
+      <form class="hero-search" method="get" action="{% url 'blog' %}"
+            hx-get="{% url 'blog' %}" hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading">
+        <label for="blog-search-q" class="visually-hidden">Rechercher un article</label>
+        <input type="text" id="blog-search-q" name="q" value="{{ search_query|default:'' }}" placeholder="Rechercher un article, une technologie…"/>
+        <button type="submit">Rechercher</button>
+      </form>
+      <div class="hero-stats">
+        <div><div class="hero-stat-n">{{ total_articles }}</div><div class="hero-stat-l">Articles publiés</div></div>
+        <div><div class="hero-stat-n">{{ total_views }}</div><div class="hero-stat-l">Lectures cumulées</div></div>
+        <div><div class="hero-stat-n">{{ total_authors }}</div><div class="hero-stat-l">Auteurs</div></div>
+      </div>
+    </div>
+    {% if featured %}
+    <div class="hero-card">
+      <div class="hc-label">
+        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#7BC142"/></svg>
+        À la une
+      </div>
+      <div class="hc-icon-wrap">
+        {% if featured.thumbnail %}<img src="{{ featured.thumbnail.url }}" alt="{{ featured.title }}" loading="eager">{% else %}{{ featured.icon|default:"📰" }}{% endif %}
+      </div>
+      <h3 class="hc-card-title">{{ featured.title }}</h3>
+      <div class="hc-meta">
+        <div class="hc-av">{% if featured.author %}{{ featured.author.get_full_name|default:featured.author.username|slice:":2"|upper }}{% else %}--{% endif %}</div>
+        <span>{% if featured.author %}{{ featured.author.get_full_name|default:featured.author.username }}{% else %}Équipe LOGO SERVICES{% endif %}</span>
+        <span class="sep">·</span>
+        <span>{{ featured.published_at|date:"d M Y" }}</span>
+        <span class="sep">·</span>
+        <span>{{ featured.read_time }} min</span>
+      </div>
+      <a href="{{ featured.get_absolute_url }}" class="hc-btn">
+        Lire l'article
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- CATS -->
+<div id="blog-cats" class="cats-bar">
+  {% include "blog/partials/cats.html" %}
+</div>
+
+<!-- PAGE -->
+<div class="page">
+  <main>
+    <div id="blog-loading" class="htmx-indicator" style="text-align:center;padding:1rem;color:var(--muted);font-size:.85rem">Chargement…</div>
+    <div id="blog-main-inner">
+      {% include "blog/partials/results.html" %}
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+        Stats du blog
+      </div>
+      <div class="stats-g">
+        <div class="stat-box"><div class="stat-n">{{ total_articles }}</div><div class="stat-l">Articles</div></div>
+        <div class="stat-box"><div class="stat-n">{{ total_views }}</div><div class="stat-l">Lectures</div></div>
+        <div class="stat-box"><div class="stat-n">{{ total_authors }}</div><div class="stat-l">Auteurs</div></div>
+        <div class="stat-box"><div class="stat-n">{{ categories|length }}</div><div class="stat-l">Catégories</div></div>
+      </div>
+    </div>
+
+    {% if popular_articles %}
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        Articles populaires
+      </div>
+      {% for a in popular_articles %}
+      <a class="pop-item" href="{{ a.get_absolute_url }}">
+        <div class="rank {% if forloop.first %}first{% endif %}">{{ forloop.counter }}</div>
+        <div><p>{{ a.title }}</p><span>{{ a.views }} lecture{{ a.views|pluralize }}</span></div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if recent_articles %}
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Articles récents
+      </div>
+      {% for a in recent_articles %}
+      <a class="rp" href="{{ a.get_absolute_url }}">
+        <div class="ri">{{ a.icon|default:"📰" }}</div>
+        <div><h4>{{ a.title }}</h4><span>{{ a.published_at|date:"d M Y" }}</span></div>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if popular_tags %}
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        Tags populaires
+      </div>
+      <div class="tags">
+        {% for tag in popular_tags %}
+        <a href="{% url 'tag' slug=tag.slug %}" hx-get="{% url 'tag' slug=tag.slug %}" hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading" class="tag-pill">{{ tag.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="sw">
+      <div class="sw-head">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+        Newsletter
+      </div>
+      <form class="nl-form" method="post" action="{% url 'newsletter' %}"
+            hx-post="{% url 'newsletter' %}"
+            hx-swap="none"
+            hx-disabled-elt="find button[type=submit]"
+            hx-on::after-request="if(event.detail.successful) this.reset()">
+        {% csrf_token %}
+        <label for="blog-newsletter-email" class="visually-hidden">Votre email</label>
+        <input type="email" id="blog-newsletter-email" name="email" placeholder="votre@email.com" required>
+        <button type="submit">S'abonner</button>
+      </form>
+    </div>
+
+  </aside>
+</div>
+
+{% endblock content %}

@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+<main>
  <!-- Services Section -->
  <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
 
@@ -19,7 +20,17 @@
             </div>
         </div>
         <div id="services-container" class="row">
-             <!-- Les services seront chargés dynamiquement ici -->
+            {% for service in services %}
+            <div class="col-md-4">
+                <div class="services-card text-center">
+                    <div class="services-icon">
+                        <i class="{{ service.icon }}"></i>
+                    </div>
+                    <h4>{{ service.libelle }}</h4>
+                    <p>{{ service.description|safe }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -83,16 +94,16 @@
                       <div class="carousel-item active">
                           <div class="d-flex justify-content-around align-items-center">
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_01.png' %}" alt="Partenaire 1" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_01.png' %}" alt="Partenaire 1" class="img-fluid" width="266" height="139" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_01.png' %}" alt="Partenaire 2" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_09.png' %}" alt="Partenaire 2" class="img-fluid" width="94" height="106" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_03.png' %}" alt="Partenaire 3" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_03.png' %}" alt="Partenaire 3" class="img-fluid" width="281" height="69" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_04.png' %}" alt="Partenaire 4" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_04.png' %}" alt="Partenaire 4" class="img-fluid" width="146" height="156" loading="lazy">
                               </div>
                           </div>
                       </div>
@@ -100,16 +111,16 @@
                       <div class="carousel-item">
                           <div class="d-flex justify-content-around align-items-center">
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_05.png' %}" alt="Partenaire 5" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_05.png' %}" alt="Partenaire 5" class="img-fluid" width="155" height="135" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_06.png' %}" alt="Partenaire 6" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_06.png' %}" alt="Partenaire 6" class="img-fluid" width="166" height="119" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_07.png' %}" alt="Partenaire 7" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_07.png' %}" alt="Partenaire 7" class="img-fluid" width="181" height="123" loading="lazy">
                               </div>
                               <div class="partner-logo">
-                                  <img src="{% static 'images/app_static/logo_08.png' %}" alt="Partenaire 8" class="img-fluid">
+                                  <img src="{% static 'images/app_static/logo_08.png' %}" alt="Partenaire 8" class="img-fluid" width="98" height="109" loading="lazy">
                               </div>
                           </div>
                       </div>
@@ -134,7 +145,18 @@
 <section id="about" class="py-5">
     <div class="container">
         <div class="row" id="about-container">
-            <!-- Contenu injecté dynamiquement ici -->
+            {% for about in abouts %}
+            {% if about.fichier %}
+            <div class="col-lg-6 about-image">
+                <img src="{{ about.fichier.url }}" alt="Image partenaire" class="img-fluid" loading="lazy">
+            </div>
+            {% endif %}
+            <div class="col-lg-6 about-content">
+                <h2 class="section-title">À Propos de <span class="logo-color-text">Logo Services</span></h2>
+                {{ about.contenu|safe }}
+                <a href="#contact" class="btn btn-custom mt-3">Découvrez notre approche</a>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -150,18 +172,28 @@
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <form id ="contact-form">
+                <form id="contact-form"
+                      method="post" action="{% url 'send_message' %}"
+                      hx-post="{% url 'send_message' %}"
+                      hx-swap="none"
+                      hx-disabled-elt="find button[type=submit]"
+                      hx-on::after-request="if(event.detail.successful) this.reset()">
+                  {% csrf_token %}
                   <div class="mb-3">
+                      <label for="nom" class="visually-hidden">Votre nom</label>
                       <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" required>
                   </div>
                   <div class="mb-3">
+                      <label for="email" class="visually-hidden">Votre email</label>
                       <input type="email" class="form-control" id="email" name="email" placeholder="Votre email" required>
                   </div>
                   <div class="mb-3">
+                      <label for="telephone" class="visually-hidden">Votre téléphone</label>
                       <input type="tel" class="form-control"  id="telephone" name="telephone" placeholder="Votre téléphone">
                   </div>
                   <div class="mb-3">
-                      <select class="form-select" id="service">
+                      <label for="service" class="visually-hidden">Service qui vous intéresse</label>
+                      <select class="form-select" id="service" name="service">
                           <option selected>Service qui vous intéresse</option>
                           <option>Génie Logiciel</option>
                           <option>Numérisation de Documents</option>
@@ -172,6 +204,7 @@
                       </select>
                   </div>
                   <div class="mb-3">
+                      <label for="message" class="visually-hidden">Votre message</label>
                       <textarea class="form-control" rows="5" id="message" name="message" placeholder="Votre message" required></textarea>
                   </div>
                   <button type="submit" class="btn btn-custom">Envoyer le message</button>
@@ -185,7 +218,7 @@
                         <i class="fas fa-map-marker-alt"></i>
                       </div>
                       <h5>Notre adresse</h5>
-                      <p id="adresse-contact"></p>
+                      <p id="adresse-contact">{{ contact.adresse|default:"Non disponible" }}</p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -194,7 +227,7 @@
                         <i class="fas fa-phone"></i>
                       </div>
                       <h5>Téléphone</h5>
-                      <p id="telephone-contact"></p>
+                      <p id="telephone-contact">{{ contact.telephone|default:"Non disponible" }}</p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -203,7 +236,7 @@
                         <i class="fas fa-envelope"></i>
                       </div>
                       <h5>Email</h5>
-                      <p id="email-contact"></p>
+                      <p id="email-contact">{{ contact.email|default:"Non disponible" }}</p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -212,7 +245,7 @@
                         <i class="fas fa-clock"></i>
                       </div>
                       <h5>Heures d'ouverture</h5>
-                      <p id="horaire-contact"></p>
+                      <p id="horaire-contact">{{ contact.heure_ouverture|default:"Non disponible" }}</p>
                     </div>
                   </div>
                 </div>
@@ -223,148 +256,5 @@
 
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("/api/services/")
-        .then(response => response.json())
-        .then(services => {
-            //console.log(services);
-          const container = document.getElementById("services-container");
-  
-          services.forEach(service => {
-            const col = document.createElement("div");
-            col.className = "col-md-4";
-  
-            col.innerHTML = `
-            <div class="services-card text-center">
-                <div class="services-icon">
-                    <i class="${service.icon}"></i>
-                </div>
-                <h4>${service.libelle}</h4>
-                <p>${service.description}</p>
-            </div>
-            `;
-            container.appendChild(col);
-          });
-        })
-        .catch(error => {
-          console.error("Erreur lors du chargement des services :", error);
-        });
-    });
-  </script>
-
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch('/api/api_about/')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById("about-container");
-    
-                data.forEach(item => {
-                    const html = `
-                        <div class="col-lg-6 about-image">
-                            <img src="${item.fichier}" alt="Image partenaire" class="img-fluid">
-                        </div>
-                        <div class="col-lg-6 about-content">
-                            <h2 class="section-title">À Propos de <span class="logo-color-text">Logo Services</span></h2>
-                            <p>${item.contenu}</p>
-                            <a href="#contact" class="btn btn-custom mt-3">Découvrez notre approche</a>
-                        </div>
-                    `;
-                    container.innerHTML += html;
-                });
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des données :', error);
-            });
-    });
-    </script> 
-    
-    
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch('/api/api_contact/')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        const contact = data[0]; // On prend le premier (ou unique) contact
-        
-                        document.getElementById("adresse-contact").textContent = contact.adresse || "Non disponible";
-                        document.getElementById("telephone-contact").textContent = contact.telephone || "Non disponible";
-                        document.getElementById("email-contact").textContent = contact.email || "Non disponible";
-                        document.getElementById("horaire-contact").textContent = contact.heure_ouverture || "Non disponible";
-                    }
-                })
-                .catch(error => {
-                    console.error("Erreur lors du chargement des contacts :", error);
-                });
-        });
-        </script>
-
-
-
-        <script>
-            function showToast(message, type = 'success') {
-                const toastId = 'toast-' + Date.now();
-        
-                const toastHtml = `
-                <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
-                    </div>
-                </div>`;
-        
-                const container = document.getElementById('toast-container');
-                container.insertAdjacentHTML('beforeend', toastHtml);
-        
-                const toastEl = document.getElementById(toastId);
-                const bsToast = new bootstrap.Toast(toastEl);
-                bsToast.show();
-        
-                // 🔊 Joue le son
-                const sound = document.getElementById('toast-sound');
-                if (sound) sound.play();
-        
-                // Optionnel : supprime le toast du DOM après disparition
-                toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
-            }
-        
-            document.getElementById('contact-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-        
-                const data = {
-                    nom: document.getElementById('nom').value,
-                    email: document.getElementById('email').value,
-                    telephone: document.getElementById('telephone').value,
-                    service: document.getElementById('service').value,
-                    message: document.getElementById('message').value,
-                };
-        
-                fetch('/api/send_message/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        showToast(result.message, 'success');
-                        document.getElementById('contact-form').reset();
-                    } else {
-                        showToast("Erreur : " + result.message, 'danger');
-                    }
-                })
-                .catch(error => {
-                    showToast("Erreur réseau : " + error, 'danger');
-                });
-            });
-        </script>        
-
+</main>
 {% endblock content %}

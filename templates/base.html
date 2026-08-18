@@ -7,41 +7,59 @@
     <!-- Meta Viewport (responsive design) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>LOGO SERVICES - Ingénierie Logicielle, Réseaux, IA & Formation</title>
+    <title>{% block page_title %}LOGO SERVICES - Ingénierie Logicielle, Réseaux, IA & Formation{% endblock page_title %}</title>
     <!-- Meta Description -->
-    <meta name="description" content="LOGO SERVICES est une société d'ingénierie spécialisée en développement logiciel, infrastructure réseau, intelligence artificielle, numérisation de documents et formations professionnelles sur mesure.">
+    <meta name="description" content="{% block page_description %}LOGO SERVICES est une société d'ingénierie spécialisée en développement logiciel, infrastructure réseau, intelligence artificielle, numérisation de documents et formations professionnelles sur mesure.{% endblock page_description %}">
     <!-- Meta Keywords -->
     <meta name="keywords" content="ingénierie logicielle, développement logiciel, infrastructure réseau, intelligence artificielle, IA, numérisation, archivage numérique, formation informatique, société informatique, LOGO SERVICES">
     <!-- Author -->
     <meta name="author" content="LOGO SERVICES">
     <!-- Meta Robots (indexation par les moteurs de recherche) -->
     <meta name="robots" content="index, follow">
-    <!-- Open Graph (pour les réseaux sociaux) -->
-    <meta property="og:title" content="LOGO SERVICES - Ingénierie Logicielle & Réseaux">
-    <meta property="og:description" content="Expert en développement logiciel, infrastructure réseau, IA, numérisation et formation. Découvrez nos solutions sur mesure.">
-    <meta property="og:url" content="https://www.logo-services.com">
-    <meta property="og:type" content="website">
+    <!-- Open Graph (pour les réseaux sociaux) : mêmes valeurs que <title>/description
+         par défaut (blocs distincts requis — Django interdit de répéter un
+         {% templatetag openblock %} block {% templatetag closeblock %} de même nom dans un même fichier) -->
+    <meta property="og:title" content="{% block og_title %}LOGO SERVICES - Ingénierie Logicielle, Réseaux, IA & Formation{% endblock og_title %}">
+    <meta property="og:description" content="{% block og_description %}LOGO SERVICES est une société d'ingénierie spécialisée en développement logiciel, infrastructure réseau, intelligence artificielle, numérisation de documents et formations professionnelles sur mesure.{% endblock og_description %}">
+    <meta property="og:image" content="{% block page_image %}https://logo-services.com{% static 'images/app_static/logo.png' %}{% endblock page_image %}">
+    <meta property="og:url" content="https://logo-services.com{{ request.path }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="LOGO SERVICES - Solutions Logicielles et Numériques">
-    <meta name="twitter:description" content="Développement logiciel, infrastructure réseau, intelligence artificielle, numérisation de documents et formation professionnelle.">
-   
+    <meta name="twitter:title" content="{% block twitter_title %}LOGO SERVICES - Ingénierie Logicielle, Réseaux, IA & Formation{% endblock twitter_title %}">
+    <meta name="twitter:description" content="{% block twitter_description %}LOGO SERVICES est une société d'ingénierie spécialisée en développement logiciel, infrastructure réseau, intelligence artificielle, numérisation de documents et formations professionnelles sur mesure.{% endblock twitter_description %}">
+
+    <!-- Canonique : domaine unique sans "www" (cohérent avec robots.txt / sitemap.xml) -->
+    <link rel="canonical" href="https://logo-services.com{{ request.path }}">
 
     <link rel="shortcut icon" href="{% static 'images/app_static/favicon.ico' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'images/app_static/favicon.ico' %}" type="image/x-icon">   
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<link href="{% static "css/styles_logo.css" %}" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    {% block extra_head %}{% endblock extra_head %}
 </head>
 <body>
     <!-- Navigation -->
     {% include "head/head.html" %}
+
+    {% block messages %}
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endblock messages %}
 
     <!-- Hero Section -->
       {% block particules %}
@@ -60,74 +78,84 @@
     <audio id="toast-sound" src="{% static 'images/alerte/alerte.mp3' %}" preload="auto"></audio>
     {% include "foot/foot.html" %}
 
+    <!-- Jeton CSRF pour htmx (voir static/js/csrf.js) -->
+    <form id="csrf-form" style="display:none">{% csrf_token %}</form>
+
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js" integrity="sha384-d+UOwmNNIC7V4izkTAKSXzWhjC2GxiS9PTykO1XdOPC3nc2z65UOS7SP6QdKPA70" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/vendor/htmx.min.js' %}"></script>
+    <script src="{% static 'js/csrf.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
 
-
-    <script> 
-        function showToast(message, type = 'success') {
-            const toastId = 'toast-' + Date.now();
-            const toastHtml = `
-            <div id="${toastId}" class="toast align-items-center text-white bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        ${message}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
-                </div>
-            </div>`;
-    
-            const container = document.getElementById('toast-container');
-            container.insertAdjacentHTML('beforeend', toastHtml);
-    
-            const toastEl = document.getElementById(toastId);
-            const bsToast = new bootstrap.Toast(toastEl);
-            bsToast.show();
-    
-            const sound = document.getElementById('toast-sound');
-            if (sound) sound.play();
-    
-            toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
-        }
-        
-        document.getElementById('subscribe-btn').addEventListener('click', function () {
-            const emailInput = document.getElementById('newsletter-email');
-            const email = emailInput.value.trim();
-    
-            if (!validateEmail(email)) {
-                showToast("Veuillez entrer un email valide.", 'danger');
-                return;
-            }
-            
-            fetch('/api/subscribe_newsletter/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    showToast(result.message, 'success');
-                    emailInput.value = '';
-                } else {
-                    showToast(result.message, 'danger');
-                }
-            })
-            .catch(error => {
-                showToast("Erreur réseau : " + error, 'danger');
-            });
+    <script>
+        // htmx envoie le jeton CSRF sur chaque requête (POST/PUT/DELETE et
+        // consorts) — nécessaire puisque htmx ne passe pas par les <form>
+        // classiques interceptées par Django, mais par fetch() en interne.
+        document.body.addEventListener('htmx:configRequest', function (evt) {
+            evt.detail.headers['X-CSRFToken'] = getCsrfToken();
         });
 
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email.toLowerCase());
+        function showToast(message, type = 'success') {
+            const toastId = 'toast-' + Date.now();
+
+            const toastEl = document.createElement('div');
+            toastEl.id = toastId;
+            toastEl.className = `toast align-items-center text-white bg-${type} border-0 mb-2`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+            toastEl.setAttribute('data-bs-delay', '5000');
+
+            const flex = document.createElement('div');
+            flex.className = 'd-flex';
+
+            const body = document.createElement('div');
+            body.className = 'toast-body';
+            body.textContent = message;
+
+            const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'btn-close btn-close-white me-2 m-auto';
+            closeBtn.setAttribute('data-bs-dismiss', 'toast');
+            closeBtn.setAttribute('aria-label', 'Fermer');
+
+            flex.appendChild(body);
+            flex.appendChild(closeBtn);
+            toastEl.appendChild(flex);
+
+            const container = document.getElementById('toast-container');
+            container.appendChild(toastEl);
+
+            const bsToast = new bootstrap.Toast(toastEl);
+            bsToast.show();
+
+            const sound = document.getElementById('toast-sound');
+            if (sound) sound.play();
+
+            toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
         }
+
+        // Les vues htmx déclenchent ce toast via l'en-tête de réponse HX-Trigger,
+        // ex: HX-Trigger: {"toast": {"message": "...", "type": "success"}}
+        // On lit l'en-tête nous-mêmes plutôt que de compter sur l'auto-déclenchement
+        // d'événement de htmx (buggé dans ce build : erreur de structure circulaire
+        // lors du JSON.stringify interne pour certaines réponses).
+        document.body.addEventListener('htmx:afterRequest', function (evt) {
+            const xhr = evt.detail && evt.detail.xhr;
+            const triggerHeader = xhr && xhr.getResponseHeader('HX-Trigger');
+            if (!triggerHeader) return;
+            try {
+                const triggers = JSON.parse(triggerHeader);
+                if (triggers.toast) {
+                    showToast(triggers.toast.message, triggers.toast.type || 'success');
+                }
+            } catch (e) {
+                console.error('Impossible de lire HX-Trigger :', e);
+            }
+        });
     </script>
 
-    
+
 </body>
 </html>

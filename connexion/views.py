@@ -1,5 +1,3 @@
 from django.shortcuts import render
 
-
-class LoginViewset(viewsets.ModelViewSet):
-    pass
+# Aucune vue n'est encore implémentée dans cette app.

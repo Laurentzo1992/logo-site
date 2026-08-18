@@ -1,0 +1,60 @@
+<div class="grid">
+  {% for article in page_obj %}
+  <article class="card">
+    <div class="card-thumb">
+      {% if article.thumbnail %}<img src="{{ article.thumbnail.url }}" alt="{{ article.title }}" loading="lazy">{% else %}{{ article.icon|default:"📰" }}{% endif %}
+      <div class="tc-line"></div>
+    </div>
+    <div class="card-body">
+      {% if article.category %}
+      <span class="card-tag"><div class="card-tag-dot"></div>{{ article.category.name }}</span>
+      {% endif %}
+      <h3>{{ article.title }}</h3>
+      <p>{{ article.excerpt }}</p>
+      <div class="card-footer">
+        <div class="auth">
+          <div class="av">{% if article.author %}{{ article.author.get_full_name|default:article.author.username|slice:":2"|upper }}{% else %}--{% endif %}</div>
+          <span>{% if article.author %}{{ article.author.get_full_name|default:article.author.username }}{% else %}Équipe{% endif %}</span>
+        </div>
+        <div class="rt">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          {{ article.read_time }} min
+        </div>
+      </div>
+      <a href="{{ article.get_absolute_url }}" class="more-btn">
+        Lire l'article
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </article>
+  {% empty %}
+  <div class="empty-state">
+    {% if search_query %}
+      Aucun article ne correspond à « {{ search_query }} ».
+    {% else %}
+      Aucun article publié pour le moment. Revenez bientôt !
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+  {% if page_obj.has_previous %}
+    <a class="pg" href="?page={{ page_obj.previous_page_number }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-get="{{ request.path }}?page={{ page_obj.previous_page_number }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading">&#8592;</a>
+  {% endif %}
+  {% for num in page_obj.paginator.page_range %}
+    <a class="pg {% if num == page_obj.number %}on{% endif %}"
+       href="?page={{ num }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-get="{{ request.path }}?page={{ num }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading">{{ num }}</a>
+  {% endfor %}
+  {% if page_obj.has_next %}
+    <a class="pg" href="?page={{ page_obj.next_page_number }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+       hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading">&#8594;</a>
+  {% endif %}
+</div>
+{% endif %}

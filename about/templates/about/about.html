@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}Qui sommes-nous ? - LOGO SERVICES{% endblock page_title %}
+{% block og_title %}Qui sommes-nous ? - LOGO SERVICES{% endblock og_title %}
+{% block twitter_title %}Qui sommes-nous ? - LOGO SERVICES{% endblock twitter_title %}
+{% block page_description %}Découvrez LOGO SERVICES : notre équipe, nos partenaires et notre approche de la transformation digitale au Burkina Faso.{% endblock page_description %}
+{% block og_description %}Découvrez LOGO SERVICES : notre équipe, nos partenaires et notre approche de la transformation digitale au Burkina Faso.{% endblock og_description %}
+{% block twitter_description %}Découvrez LOGO SERVICES : notre équipe, nos partenaires et notre approche de la transformation digitale au Burkina Faso.{% endblock twitter_description %}
+
+{% block particules %}{% endblock particules %}
+
+{% block content %}
+<main>
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h1 class="section-center-title">{{ labels.about|default:"Qui sommes-nous ?" }}</h1>
+                <p class="lead">{{ labels.slogan }}</p>
+            </div>
+        </div>
+
+        {% if labels.warning %}
+        <div class="alert alert-warning">{{ labels.warning }}</div>
+        {% endif %}
+
+        {% for about in abouts %}
+        <div class="row align-items-center g-4 mb-4">
+            {% if about.fichier %}
+            <div class="col-lg-6 about-image">
+                <img src="{{ about.fichier.url }}" alt="Image partenaire" class="img-fluid rounded" loading="lazy">
+            </div>
+            {% endif %}
+            <div class="col-lg-6 about-content">
+                <h2 class="section-title">À Propos de <span class="logo-color-text">Logo Services</span></h2>
+                {{ about.contenu|safe }}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Aucune information disponible pour le moment.</div>
+        {% endfor %}
+    </div>
+</section>
+</main>
+{% endblock content %}

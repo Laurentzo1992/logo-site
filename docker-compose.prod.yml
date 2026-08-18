@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-logosite}
+      POSTGRES_USER: ${DB_USER:-logosite}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-logosite} -d ${DB_NAME:-logosite}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Pas de "ports:" ici volontairement : la base ne doit pas être joignable
+    # depuis l'extérieur du serveur, seulement par les autres conteneurs.
+
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - static_data:/app/static
+      - media_data:/app/logosite/static/images
+    # Pas de "ports:" non plus : seul Caddy expose le site, en HTTPS,
+    # et lui parle en interne sur le réseau docker (web:8000).
+
+  cron:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      FETCH_NEWS_INTERVAL_SECONDS: ${FETCH_NEWS_INTERVAL_SECONDS:-3600}
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/app/cron_entrypoint.sh"]
+    command: []
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:
+  caddy_data:
+  caddy_config:

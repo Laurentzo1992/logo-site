@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-logosite}
+      POSTGRES_USER: ${DB_USER:-logosite}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-logosite}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-logosite} -d ${DB_NAME:-logosite}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5433:5432"
+
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - static_data:/app/static
+      - media_data:/app/logosite/static/images
+    ports:
+      - "8001:8000"
+
+  cron:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      FETCH_NEWS_INTERVAL_SECONDS: ${FETCH_NEWS_INTERVAL_SECONDS:-3600}
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/app/cron_entrypoint.sh"]
+    command: []
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:

@@ -1,0 +1,6 @@
+<button type="button" class="btn btn-outline-custom {% if not active_categorie_id %}active{% endif %}"
+        hx-get="{% url 'catalog' %}" hx-target="#portfolio-grid" hx-push-url="true" hx-indicator="#portfolio-loading">Tous</button>
+{% for cat in categories %}
+<button type="button" class="btn btn-outline-custom {% if active_categorie_id|stringformat:'s' == cat.id|stringformat:'s' %}active{% endif %}"
+        hx-get="{% url 'catalog' %}?categorie={{ cat.id }}" hx-target="#portfolio-grid" hx-push-url="true" hx-indicator="#portfolio-loading">{{ cat.libelle }} ({{ cat.count }})</button>
+{% endfor %}

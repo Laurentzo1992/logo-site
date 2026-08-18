@@ -1,0 +1,4 @@
+<a href="{% url 'blog' %}" hx-get="{% url 'blog' %}" hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading" class="cat {% if not active_category and not active_tag %}on{% endif %}">Tous <span class="cat-count">{{ total_articles }}</span></a>
+{% for cat in categories %}
+<a href="{% url 'blog' %}?category={{ cat.slug }}" hx-get="{% url 'blog' %}?category={{ cat.slug }}" hx-target="#blog-main-inner" hx-push-url="true" hx-indicator="#blog-loading" class="cat {% if active_category.slug == cat.slug %}on{% endif %}">{{ cat.icon }} {{ cat.name }} <span class="cat-count">{{ cat.count }}</span></a>
+{% endfor %}

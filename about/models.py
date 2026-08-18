@@ -7,7 +7,7 @@ from tinymce import models as tinymce_models
 
 
 class About_Us(models.Model):
-    fichier = models.FileField(upload_to='partenaire_img/', null=True, blank=True, verbose_name="Les images Partenaire de logo services")
+    fichier = models.ImageField(upload_to='partenaire_img/', null=True, blank=True, verbose_name="Les images Partenaire de logo services")
     contenu = tinymce_models.HTMLField(blank=True, null=True, verbose_name="Description")
     
     

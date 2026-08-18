@@ -1,0 +1,24 @@
+{% load static %}
+{% for projet in projets %}
+<div class="col-lg-4 col-md-6 mb-4 portfolio-item">
+    <div class="portfolio-card">
+        <div class="portfolio-img">
+            <img src="{% static 'images/app_static/foldes.svg' %}" alt="{{ projet.categorie.libelle }}" class="img-fluid" width="200" height="200" loading="lazy">
+            <div class="portfolio-overlay">
+                <div class="portfolio-overlay-content">
+                    <a href="#portfolioModal{{projet.id}}" data-bs-toggle="modal" class="portfolio-icon">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="portfolio-info">
+            <h4>{{ projet.intitule|safe}}</h4>
+            <p class="category">{{ projet.categorie.libelle }}</p>
+        </div>
+    </div>
+</div>
+{% include "catalog/modal.html" %}
+{% empty %}
+<div class="col-12 text-center text-muted py-5">Aucun projet dans cette catégorie pour le moment.</div>
+{% endfor %}

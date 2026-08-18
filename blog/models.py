@@ -25,7 +25,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("blog:category", kwargs={"slug": self.slug})
+        return reverse("category", kwargs={"slug": self.slug})
 
 
 class Tag(models.Model):
@@ -108,6 +108,14 @@ class Article(models.Model):
         verbose_name="Temps de lecture (min)"
     )
 
+    # Veille externe (articles récupérés automatiquement par `fetch_news`)
+    source_name = models.CharField(max_length=150, blank=True, verbose_name="Source (nom)")
+    source_url  = models.URLField(
+        max_length=500, blank=True, null=True, unique=True,
+        verbose_name="Source (URL)",
+        help_text="Renseigné automatiquement pour les articles de veille — sert aussi de clé anti-doublon.",
+    )
+
     class Meta:
         ordering = ["-published_at", "-created_at"]
         verbose_name = "Article"
@@ -119,7 +127,13 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)[:270]
+            slug = base_slug
+            suffix = 1
+            while Article.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                suffix += 1
+                slug = f"{base_slug}-{suffix}"
+            self.slug = slug
         # Calcul automatique du temps de lecture (~200 mots/min)
         word_count = len(self.content.split())
         self.read_time = max(1, round(word_count / 200))
@@ -129,7 +143,7 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("blog:detail", kwargs={"slug": self.slug})
+        return reverse("detail", kwargs={"slug": self.slug})
 
     def increment_views(self):
         Article.objects.filter(pk=self.pk).update(views=models.F("views") + 1)
@@ -150,7 +164,10 @@ class Comment(models.Model):
     guest_name  = models.CharField(max_length=100, blank=True, verbose_name="Nom (visiteur)")
     guest_email = models.EmailField(blank=True, verbose_name="Email (visiteur)")
     content    = models.TextField(verbose_name="Commentaire")
-    is_approved = models.BooleanField(default=False, verbose_name="Approuvé")
+    is_approved = models.BooleanField(
+        default=True, verbose_name="Approuvé",
+        help_text="Publié immédiatement sans modération. Décoche pour masquer un commentaire a posteriori.",
+    )
     created_at  = models.DateTimeField(auto_now_add=True)
 
     class Meta:

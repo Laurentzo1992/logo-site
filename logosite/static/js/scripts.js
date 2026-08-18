@@ -1,5 +1,6 @@
-// Initialisation de Particles.js
+// Initialisation de Particles.js (uniquement sur les pages qui affichent la bannière héro)
         document.addEventListener('DOMContentLoaded', function() {
+            if (!document.getElementById('particles-js')) return;
             particlesJS('particles-js', {
                 "particles": {
                     "number": {

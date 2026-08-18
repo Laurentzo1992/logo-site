@@ -3,22 +3,22 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{projet.categorie.libelle}}</h5>
+                <h5 class="modal-title">{{projet.intitule|safe}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk4voxtSXi-DDpbsngUWe8WJ7K47Y5Ir0CjQ&s" alt="Application de gestion" class="img-fluid">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk4voxtSXi-DDpbsngUWe8WJ7K47Y5Ir0CjQ&s" alt="Application de gestion" class="img-fluid" loading="lazy">
                     </div>
                     <div class="col-md-6">
                         <h4>Détails du projet</h4>
                         <p><strong>Client:</strong> {{projet.nom_client}}</p>
                         <p><strong>Catégorie:</strong> {{projet.categorie.libelle}}</p>
                         <p><strong>Date:</strong> {{projet.annee_execution}}</p>
-                        <p><strong>Défi:</strong> {{projet.defis|safe}}</p>
-                        <p><strong>Solution:</strong> {{projet.solution|safe}}.</p>
-                        <p><strong>Résultats:</strong> {{projet.resultat|safe}}.</p>
+                        {% if projet.defis %}<p><strong>Défi:</strong> {{projet.defis}}</p>{% endif %}
+                        {% if projet.solution %}<p><strong>Solution:</strong> {{projet.solution}}</p>{% endif %}
+                        {% if projet.resultat %}<p><strong>Résultats:</strong> {{projet.resultat}}</p>{% endif %}
                     </div>
                 </div>
             </div>

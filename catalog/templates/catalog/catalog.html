@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block page_title %}Nos Réalisations - LOGO SERVICES{% endblock page_title %}
+{% block og_title %}Nos Réalisations - LOGO SERVICES{% endblock og_title %}
+{% block twitter_title %}Nos Réalisations - LOGO SERVICES{% endblock twitter_title %}
+{% block page_description %}Découvrez le catalogue de projets réalisés par LOGO SERVICES : génie logiciel, numérisation de documents et transformation digitale.{% endblock page_description %}
+{% block og_description %}Découvrez le catalogue de projets réalisés par LOGO SERVICES : génie logiciel, numérisation de documents et transformation digitale.{% endblock og_description %}
+{% block twitter_description %}Découvrez le catalogue de projets réalisés par LOGO SERVICES : génie logiciel, numérisation de documents et transformation digitale.{% endblock twitter_description %}
+
+{% block particules %}{% endblock particules %}
+
 {% block content %}
+<main>
 <!-- Portfolio Section -->
 <section id="portfolio" class="py-5">
   <div class="container">
       <div class="row">
           <div class="col-12 text-center mb-5">
-              <h2 class="section-center-title">Nos Réalisations</h2>
+              <h1 class="section-center-title">Nos Réalisations</h1>
               <p class="lead">Découvrez notre cartographie de projets réalisés</p>
           </div>
       </div>
@@ -14,46 +25,17 @@
       <!-- Portfolio Filter -->
       <div class="row mb-4">
           <div class="col-12 text-center">
-              <div class="portfolio-filter">
-                  <button class="btn btn-outline-custom active" data-filter="*">Tous</button>
-                  <button class="btn btn-outline-custom" data-filter=".genie-logiciel">Génie Logiciel</button>
-                  <button class="btn btn-outline-custom" data-filter=".numerisation">Numérisation</button>
-                  <button class="btn btn-outline-custom" data-filter=".reseaux">Réseaux</button>
-                  <button class="btn btn-outline-custom" data-filter=".securite">Sécurité</button>
-                  <button class="btn btn-outline-custom" data-filter=".ia">Intelligence Artificielle</button>
+              <div id="portfolio-filter" class="portfolio-filter">
+                  {% include "catalog/partials/filter.html" %}
               </div>
           </div>
       </div>
-      
+
+      <div id="portfolio-loading" class="htmx-indicator text-center py-3 text-muted">Chargement…</div>
+
       <!-- Portfolio Grid -->
-      <div class="row portfolio-container">
-          <!-- Projet 1 -->
-          {% for projet in projets %}
-        <div class="col-lg-4 col-md-6 mb-4 portfolio-item {{ projet.nom_client }}">
-            <div class="portfolio-card">
-                <div class="portfolio-img">
-                    <img src="{% static 'images/app_static/foldes.svg' %}" alt="{{ projet.categorie.libelle }}" class="img-fluid">
-                    <div class="portfolio-overlay">
-                        <div class="portfolio-overlay-content">
-                            <a href="#portfolioModal{{projet.id}}" data-bs-toggle="modal" class="portfolio-icon">
-                                <i class="fas fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-info">
-                    <h4>{{ projet.intitule|safe}}</h4>
-                    <p class="category">{{ projet.categorie.nom }}</p>
-                </div>
-            </div>
-        </div>
-        {% include "catalog/modal.html" %}
-        {% endfor %}
-      <!-- Show More Button -->
-      <div class="row mt-4">
-          <div class="col-12 text-center">
-              <button class="btn btn-custom" id="load-more">Voir plus de projets</button>
-          </div>
+      <div class="row portfolio-container" id="portfolio-grid">
+          {% include "catalog/partials/grid.html" %}
       </div>
   </div>
 </section>
@@ -107,66 +89,40 @@
       </div>
   </div>
 </section>
-
-<!-- Testimonial Section -->
-
-{% comment %} {% include "catalog/temoignage.html" %} {% endcomment %}
-
-<!-- Portfolio Modals -->
-
-
-<!-- Add other modals in the same format -->
+</main>
 
 <!-- Custom CSS for the portfolio section -->
 <style>
-  /* Colors from the logo */
-  :root {
-    --logo-green: #8DC63F;
-    --logo-blue: #322770;
-  }
-  
-  /* Custom button styling */
+  /* Boutons pleins : les variables --primary-color/--secondary-color viennent
+     de logosite/static/css/styles_logo.css (:root), chargé globalement dans
+     base.html. On garde une déclinaison locale "pleine" de .btn-custom car la
+     version globale est pensée pour un bouton blanc sur fond coloré (hero),
+     ce qui serait invisible ici sur fond blanc. */
   .btn-custom {
-    background-color: var(--logo-green);
-    border-color: var(--logo-green);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     color: white;
   }
-  
+
   .btn-custom:hover, .btn-custom:focus {
     background-color: #7ab52f;
     border-color: #7ab52f;
     color: white;
   }
-  
+
   .btn-outline-custom {
-    color: var(--logo-blue);
-    border-color: var(--logo-blue);
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
   }
-  
+
   .btn-outline-custom:hover, .btn-outline-custom:focus, .btn-outline-custom.active {
-    background-color: var(--logo-blue);
+    background-color: var(--secondary-color);
     color: white;
   }
-  
-  /* Section titles */
-  .section-center-title {
-    color: var(--logo-blue);
-    position: relative;
-    padding-bottom: 15px;
-    margin-bottom: 30px;
-  }
-  
-  .section-center-title:after {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 3px;
-    background-color: var(--logo-green);
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
+
+  /* .section-center-title est déjà stylé globalement (styles_logo.css) —
+     pas de redéfinition locale ici pour rester cohérent avec le reste du site. */
+
   /* Portfolio items */
   .portfolio-card {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -191,7 +147,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(141, 198, 63, 0.8);
+    background-color: rgba(123, 193, 66, 0.8); /* var(--primary-color) #7BC142 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -211,13 +167,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--logo-blue);
+    color: var(--secondary-color);
     font-size: 20px;
     transition: all 0.3s ease;
   }
   
   .portfolio-icon:hover {
-    background-color: var(--logo-blue);
+    background-color: var(--secondary-color);
     color: white;
   }
   
@@ -228,11 +184,11 @@
   
   .portfolio-info h4 {
     margin-bottom: 5px;
-    color: var(--logo-blue);
+    color: var(--secondary-color);
   }
   
   .portfolio-info .category {
-    color: var(--logo-green);
+    color: var(--primary-color);
     font-weight: 500;
   }
   
@@ -244,75 +200,26 @@
   
   .stats-icon {
     font-size: 30px;
-    color: var(--logo-green);
+    color: var(--primary-color);
     margin-bottom: 15px;
   }
   
   .counter {
     font-size: 40px;
     font-weight: 700;
-    color: var(--logo-blue);
+    color: var(--secondary-color);
     margin-bottom: 10px;
-  }
-  
-  /* Testimonials */
-  .testimonial-item {
-    padding: 30px 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .testimonial-img {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 20px;
-    border: 5px solid var(--logo-green);
-  }
-  
-  .testimonial-text {
-    font-style: italic;
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
-  .client-position {
-    color: var(--logo-green);
   }
   
   /* Modal customization */
   .portfolio-modal .modal-title {
-    color: var(--logo-blue);
+    color: var(--secondary-color);
   }
 </style>
 
-<!-- Additional JS for portfolio filtering and counters -->
+<!-- JS pour l'animation des compteurs (le filtre catégorie est géré par htmx, voir catalog/partials/) -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Portfolio filtering
-    const filterButtons = document.querySelectorAll('.portfolio-filter button');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    
-    filterButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        // Remove active class from all buttons
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        // Add active class to current button
-        this.classList.add('active');
-        
-        const filterValue = this.getAttribute('data-filter');
-        
-        portfolioItems.forEach(item => {
-          if (filterValue === '*') {
-            item.style.display = 'block';
-          } else if (item.classList.contains(filterValue.substring(1))) {
-            item.style.display = 'block';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
-    
     // Counter animation
     const counters = document.querySelectorAll('.counter');
     const speed = 200;

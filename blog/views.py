@@ -1,33 +1,45 @@
-from django.shortcuts import render
+from urllib.parse import urlencode
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from utils.cons import ARTICLES_PER_PAGE
+from utils.htmx import htmx_toast, is_htmx
+from utils.ratelimit import rate_limit_json
 from .models import Article, Category, Tag, Comment, NewsletterSubscriber
 
 
-def blog(request):
-    return render(request, 'blog/blog.html')
-
+def _blog_response(request, ctx):
+    """Page complète normalement ; en htmx, ne renvoie que la barre de
+    catégories (en out-of-band swap) + la grille/pagination ciblées par
+    #blog-main-inner — voir blog/partials/."""
+    if is_htmx(request):
+        html = render_to_string("blog/partials/cats_oob.html", ctx, request=request)
+        html += render_to_string("blog/partials/results.html", ctx, request=request)
+        return HttpResponse(html)
+    return render(request, "blog/index.html", ctx)
 
 
 def _sidebar_context():
-    """Contexte commun à toutes les vues (sidebar)."""
+    """Contexte commun à toutes les vues (sidebar + stats du hero)."""
+    published = Article.objects.filter(status=Article.Status.PUBLISHED)
     return {
         "categories":      Category.objects.annotate(
                                count=Count("articles", filter=Q(articles__status=Article.Status.PUBLISHED))
                            ).order_by("order", "name"),
-        "popular_articles": Article.objects.filter(status=Article.Status.PUBLISHED)
-                                .order_by("-views")[:4],
-        "recent_articles":  Article.objects.filter(status=Article.Status.PUBLISHED)
-                                .order_by("-published_at")[:4],
+        "popular_articles": published.order_by("-views")[:4],
+        "recent_articles":  published.order_by("-published_at")[:4],
         "popular_tags":     Tag.objects.annotate(
                                 count=Count("articles", filter=Q(articles__status=Article.Status.PUBLISHED))
                             ).order_by("-count")[:12],
-        "total_articles":   Article.objects.filter(status=Article.Status.PUBLISHED).count(),
+        "total_articles":   published.count(),
+        "total_views":      published.aggregate(total=Sum("views"))["total"] or 0,
+        "total_authors":    published.exclude(author__isnull=True).values("author").distinct().count(),
     }
 
 
@@ -79,7 +91,7 @@ def blog_index(request):
         "search_query":    q,
         **_sidebar_context(),
     }
-    return render(request, "blog/index.html", ctx)
+    return _blog_response(request, ctx)
 
 
 def article_detail(request, slug):
@@ -116,7 +128,7 @@ def article_detail(request, slug):
 
 def category_view(request, slug):
     """Filtre par catégorie — redirige vers index avec param GET."""
-    return redirect(f"/blog/?category={slug}")
+    return redirect(f"{reverse('blog')}?{urlencode({'category': slug})}")
 
 
 def tag_view(request, slug):
@@ -132,20 +144,27 @@ def tag_view(request, slug):
         "active_tag": tag,
         **_sidebar_context(),
     }
-    return render(request, "blog/index.html", ctx)
+    return _blog_response(request, ctx)
 
 
 # ─── Actions POST ──────────────────────────────────────────────────────────────
 
 @require_POST
+@rate_limit_json("add_comment", limit=10, period=60)
 def add_comment(request, slug):
     """Soumission d'un commentaire (visiteur ou utilisateur connecté)."""
     article = get_object_or_404(Article, slug=slug, status=Article.Status.PUBLISHED)
 
+    def respond(level, message):
+        getattr(messages, level)(request, message)
+        if is_htmx(request):
+            comments = article.comments.filter(is_approved=True).select_related("author")
+            return render(request, "blog/partials/comments.html", {"article": article, "comments": comments})
+        return redirect(f"{article.get_absolute_url()}#comments")
+
     content = request.POST.get("content", "").strip()
     if not content:
-        messages.error(request, "Le commentaire ne peut pas être vide.")
-        return redirect(article.get_absolute_url())
+        return respond("error", "Le commentaire ne peut pas être vide.")
 
     comment = Comment(article=article, content=content)
 
@@ -155,39 +174,38 @@ def add_comment(request, slug):
         name  = request.POST.get("guest_name", "").strip()
         email = request.POST.get("guest_email", "").strip()
         if not name:
-            messages.error(request, "Veuillez indiquer votre nom.")
-            return redirect(article.get_absolute_url())
+            return respond("error", "Veuillez indiquer votre nom.")
         comment.guest_name  = name
         comment.guest_email = email
 
     comment.save()
-    messages.success(request, "Votre commentaire est en attente de modération.")
-    return redirect(article.get_absolute_url())
+    return respond("success", "Merci ! Votre commentaire a été publié.")
 
 
 @require_POST
+@rate_limit_json("newsletter_subscribe", limit=5, period=60)
 def newsletter_subscribe(request):
-    """Inscription à la newsletter (JSON ou form classique)."""
+    """Inscription à la newsletter (htmx ou form classique)."""
     email = request.POST.get("email", "").strip()
 
     if not email:
-        if request.headers.get("x-requested-with") == "XMLHttpRequest":
-            return JsonResponse({"ok": False, "error": "Email requis."}, status=400)
+        if is_htmx(request):
+            return htmx_toast("Email requis.", success=False, status=400)
         messages.error(request, "Email requis.")
-        return redirect(request.META.get("HTTP_REFERER", "/blog/"))
+        return redirect(request.META.get("HTTP_REFERER", reverse("blog")))
 
     _, created = NewsletterSubscriber.objects.get_or_create(email=email)
 
     msg = "Merci ! Vous êtes bien inscrit." if created else "Vous êtes déjà abonné."
 
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        return JsonResponse({"ok": True, "message": msg})
+    if is_htmx(request):
+        return htmx_toast(msg, success=True)
 
     messages.success(request, msg)
-    return redirect(request.META.get("HTTP_REFERER", "/blog/"))
+    return redirect(request.META.get("HTTP_REFERER", reverse("blog")))
 
 
 def search_view(request):
     """Recherche globale — redirige vers index avec param q."""
     q = request.GET.get("q", "")
-    return redirect(f"/blog/?q={q}")
+    return redirect(f"{reverse('blog')}?{urlencode({'q': q})}")

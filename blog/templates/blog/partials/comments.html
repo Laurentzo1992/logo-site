@@ -1,0 +1,43 @@
+<div class="comments" id="comments">
+  <h3>Commentaires ({{ comments|length }})</h3>
+
+  {% if messages %}
+  <div class="comment-messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% for comment in comments %}
+  <div class="comment-item">
+    <div class="c-head">
+      <strong>{% if comment.author %}{{ comment.author.get_full_name|default:comment.author.username }}{% else %}{{ comment.guest_name }}{% endif %}</strong>
+      <span>{{ comment.created_at|date:"d M Y H:i" }}</span>
+    </div>
+    <p>{{ comment.content }}</p>
+  </div>
+  {% empty %}
+  <p style="color:var(--muted);font-size:.85rem">Aucun commentaire pour le moment. Soyez le premier à réagir !</p>
+  {% endfor %}
+
+  <form class="comment-form" method="post" action="{% url 'comment' slug=article.slug %}"
+        hx-post="{% url 'comment' slug=article.slug %}"
+        hx-target="#comments"
+        hx-swap="outerHTML"
+        hx-disabled-elt="find button[type=submit]">
+    {% csrf_token %}
+    {% if not request.user.is_authenticated %}
+    <label for="comment-guest-name" class="visually-hidden">Votre nom</label>
+    <input type="text" id="comment-guest-name" name="guest_name" placeholder="Votre nom" required>
+    <label for="comment-guest-email" class="visually-hidden">Votre email (optionnel)</label>
+    <input type="email" id="comment-guest-email" name="guest_email" placeholder="Votre email (optionnel)">
+    {% endif %}
+    <label for="comment-content" class="visually-hidden">Votre commentaire</label>
+    <textarea id="comment-content" name="content" rows="3" placeholder="Votre commentaire…" required></textarea>
+    <button type="submit">Publier mon commentaire</button>
+  </form>
+</div>

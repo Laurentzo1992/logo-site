@@ -35,9 +35,9 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display   = ("title", "category", "author", "status", "is_featured", "views", "read_time", "published_at")
-    list_filter    = ("status", "is_featured", "category")
-    search_fields  = ("title", "excerpt", "content")
+    list_display   = ("title", "category", "source_name", "author", "status", "is_featured", "views", "read_time", "published_at")
+    list_filter    = ("status", "is_featured", "category", "source_name")
+    search_fields  = ("title", "excerpt", "content", "source_name")
     list_editable  = ("status", "is_featured")
     prepopulated_fields = {"slug": ("title",)}
     filter_horizontal   = ("tags",)
@@ -55,6 +55,11 @@ class ArticleAdmin(admin.ModelAdmin):
         }),
         ("Publication", {
             "fields": ("author", "status", "is_featured", "published_at")
+        }),
+        ("Veille externe", {
+            "fields": ("source_name", "source_url"),
+            "description": "Renseigné automatiquement par `manage.py fetch_news` pour les articles de veille.",
+            "classes": ("collapse",)
         }),
         ("Métriques (auto)", {
             "fields": ("views", "read_time", "created_at", "updated_at"),

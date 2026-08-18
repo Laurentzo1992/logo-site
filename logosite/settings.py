@@ -1,6 +1,8 @@
 from pathlib import Path
 import  os
-from decouple import config
+from decouple import config, Csv
+from django.contrib.messages import constants as message_constants
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -15,10 +17,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=Csv())
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Active les en-têtes/cookies HTTPS uniquement une fois le site réellement
+# servi en HTTPS (derrière un reverse proxy ou un PaaS qui termine le TLS).
+# Mettre USE_HTTPS=True dans l'environnement de production une fois le
+# certificat en place.
+USE_HTTPS = config('USE_HTTPS', default=not DEBUG, cast=bool)
+
+if USE_HTTPS:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 
 # Application definition
@@ -41,6 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -75,25 +96,24 @@ WSGI_APPLICATION = "logosite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASE_URL = config(
+    'DATABASE_URL',
+    default='postgres://{user}:{password}@{host}:{port}/{name}'.format(
+        user=config('DB_USER', default='logosite'),
+        password=config('DB_PASSWORD', default='logosite'),
+        host=config('DB_HOST', default='db'),
+        port=config('DB_PORT', default='5432'),
+        name=config('DB_NAME', default='logosite'),
+    ),
+)
 
-"""
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': 'logo_services',
-         'USER': 'ubuntu',
-         'PASSWORD': 'pago@2023',
-         'HOST': '178.32.42.24',
-         'PORT': '5432',
-     }
- }
-"""
+    "default": dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=config('DB_SSL_REQUIRE', default=False, cast=bool),
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -134,6 +154,11 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "logosite/static/images")
 
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
+
 # Default primary key field type
 
 
@@ -146,6 +171,10 @@ REST_FRAMEWORK = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MESSAGE_TAGS = {
+    message_constants.ERROR: "danger",
+}
 
 LIBELLE_FILE_DIR = BASE_DIR / 'libelle'
 
