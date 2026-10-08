@@ -1,0 +1,32 @@
+# Caddy partagé du VPS : seul conteneur exposé sur Internet (80/443). Il sert
+# toutes les plateformes hébergées sur ce serveur et gère leurs certificats
+# HTTPS. Chaque plateforme rejoint le réseau Docker externe "proxy" avec un
+# alias unique, et a son fichier dans sites/ (voir README.md).
+#
+# Sur le VPS, ce dossier est copié dans /opt/caddy :
+#   docker network create proxy     # une seule fois
+#   cd /opt/caddy && docker compose up -d
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./sites:/etc/caddy/sites:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:

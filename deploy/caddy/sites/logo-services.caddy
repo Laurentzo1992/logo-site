@@ -1,0 +1,12 @@
+# Site vitrine LOGO SERVICES (projet /opt/logo-site).
+# "logo-site-web" est l'alias du conteneur web sur le réseau "proxy"
+# (voir docker-compose.standalone.yml).
+
+www.logo-services.com {
+	redir https://logo-services.com{uri} permanent
+}
+
+logo-services.com {
+	encode zstd gzip
+	reverse_proxy logo-site-web:8000
+}

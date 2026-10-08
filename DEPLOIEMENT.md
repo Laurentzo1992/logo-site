@@ -49,6 +49,30 @@ Le pare-feu doit autoriser `OpenSSH`, `80/tcp`, `443/tcp` et `443/udp`.
 
 ---
 
+## 1 bis. Installer le Caddy partagé (une seule fois par serveur)
+
+Un seul Caddy, dans `/opt/caddy`, sert **toutes** les plateformes du VPS
+(logo-services.com aujourd'hui, les autres plus tard) et gère leurs
+certificats HTTPS. Les plateformes s'y branchent via le réseau Docker `proxy`.
+Pour en ajouter une plus tard, voir [deploy/caddy/README.md](deploy/caddy/README.md).
+
+**[NOUVEAU]**
+```
+docker network create proxy
+sudo mkdir -p /opt/caddy && sudo chown $USER:$USER /opt/caddy
+cp -r /opt/logo-site/deploy/caddy/. /opt/caddy/
+cd /opt/caddy
+docker compose up -d
+docker compose ps
+```
+Le conteneur `caddy` doit être `Up`. Tant que le site et le DNS ne sont pas en
+place, ses logs contiendront des erreurs de certificat : c'est normal.
+
+> `/opt/caddy` est désormais indépendant du dépôt : les futures plateformes y
+> ajoutent leur fichier dans `sites/` sans toucher à logo-site.
+
+---
+
 ## 2. Créer le fichier `.env` de production
 
 **[NOUVEAU]**
@@ -138,8 +162,13 @@ docker compose up -d
 docker compose ps
 docker compose logs web --tail 30
 ```
-Les 4 conteneurs (`db`, `web`, `cron`, `caddy`) doivent être `Up`. Dans les
-logs de `web`, tu dois voir `Listening at: http://0.0.0.0:8000`.
+Les 3 conteneurs (`db`, `web`, `cron`) doivent être `Up`. Dans les logs de
+`web`, tu dois voir `Listening at: http://0.0.0.0:8000`.
+
+Vérifie que Caddy voit bien le site sur le réseau `proxy` (doit afficher une IP) :
+```
+docker run --rm --network proxy busybox nslookup logo-site-web
+```
 
 Test de Django avant la bascule DNS (doit afficher `200`) :
 ```
@@ -169,11 +198,12 @@ nslookup logo-services.com
 
 Puis sur le **[NOUVEAU]**, regarde Caddy obtenir le certificat :
 ```
-cd /opt/logo-site
-docker compose -f docker-compose.standalone.yml logs -f caddy
+cd /opt/caddy
+docker compose logs -f caddy
 ```
 Attends une ligne `certificate obtained successfully` pour les deux domaines
 (`Ctrl+C` pour quitter), puis ouvre https://logo-services.com dans le navigateur.
+https://www.logo-services.com doit rediriger vers https://logo-services.com.
 
 ---
 

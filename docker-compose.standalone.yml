@@ -1,12 +1,12 @@
-# Déploiement sur un VPS dédié au site (pas de Caddy partagé) : ce fichier
-# lance son propre Caddy, qui obtient et renouvelle seul les certificats
-# HTTPS de logo-services.com. Seul Caddy est exposé (ports 80/443) ; la base
-# et Django ne sont joignables que par les autres conteneurs.
+# Déploiement sur le VPS dédié (139.99.209.66). Le HTTPS est assuré par le
+# Caddy partagé du serveur (deploy/caddy/, installé dans /opt/caddy), qui sert
+# aussi les autres plateformes : "web" rejoint son réseau externe "proxy" sous
+# l'alias "logo-site-web". Aucun port n'est exposé par ce projet.
 #
 # Usage sur le VPS :
 #   docker compose -f docker-compose.standalone.yml up -d --build
 #
-# Pour le VPS partagé (Caddy de kbot), utiliser docker-compose.prod.yml.
+# Pour l'ancien VPS partagé (Caddy de kbot), voir docker-compose.prod.yml.
 
 services:
   db:
@@ -38,6 +38,11 @@ services:
     volumes:
       - static_data:/app/static
       - media_data:/app/logosite/static/images
+    networks:
+      default:
+      proxy:
+        aliases:
+          - logo-site-web
 
   cron:
     build: .
@@ -54,23 +59,12 @@ services:
     entrypoint: ["/app/cron_entrypoint.sh"]
     command: []
 
-  caddy:
-    image: caddy:2-alpine
-    restart: unless-stopped
-    depends_on:
-      - web
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
+networks:
+  default:
+  proxy:
+    external: true
 
 volumes:
   postgres_data:
   static_data:
   media_data:
-  caddy_data:
-  caddy_config:

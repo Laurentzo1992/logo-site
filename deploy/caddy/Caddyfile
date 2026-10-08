@@ -1,0 +1,8 @@
+{
+	# Adresse utilisée par Let's Encrypt pour prévenir en cas de problème
+	# de certificat (expiration, révocation).
+	email laurent.nikiema@logo-services.com
+}
+
+# Un fichier par plateforme dans sites/ (ex. sites/logo-services.caddy).
+import sites/*.caddy
