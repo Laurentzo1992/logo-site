@@ -1,10 +1,9 @@
-# ATTENTION : ce fichier n'est PAS utilisé sur le VPS actuel — ce serveur a
-# déjà un Caddy partagé (projet /opt/kbot/, qui sert aussi oser-bf.org et
-# mentorat_site). La configuration réelle de logo-services.com vit dans
-# /opt/kbot/Caddyfile, pas ici. Ce fichier ne sert que si ce site est un
-# jour déployé seul sur un VPS dédié (voir docker-compose.prod.yml.standalone
-# le cas échéant).
+# Utilisé par docker-compose.standalone.yml (VPS dédié au site).
+#
+# Sur le VPS partagé de kbot, ce fichier n'est PAS utilisé : la configuration
+# de logo-services.com vit dans /opt/kbot/Caddyfile (voir docker-compose.prod.yml).
 
 logo-services.com, www.logo-services.com {
+	encode zstd gzip
 	reverse_proxy web:8000
 }

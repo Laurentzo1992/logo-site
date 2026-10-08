@@ -1,0 +1,76 @@
+# Déploiement sur un VPS dédié au site (pas de Caddy partagé) : ce fichier
+# lance son propre Caddy, qui obtient et renouvelle seul les certificats
+# HTTPS de logo-services.com. Seul Caddy est exposé (ports 80/443) ; la base
+# et Django ne sont joignables que par les autres conteneurs.
+#
+# Usage sur le VPS :
+#   docker compose -f docker-compose.standalone.yml up -d --build
+#
+# Pour le VPS partagé (Caddy de kbot), utiliser docker-compose.prod.yml.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-logosite}
+      POSTGRES_USER: ${DB_USER:-logosite}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-logosite} -d ${DB_NAME:-logosite}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - static_data:/app/static
+      - media_data:/app/logosite/static/images
+
+  cron:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      FETCH_NEWS_INTERVAL_SECONDS: ${FETCH_NEWS_INTERVAL_SECONDS:-3600}
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/app/cron_entrypoint.sh"]
+    command: []
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:
+  caddy_data:
+  caddy_config:
