@@ -164,9 +164,46 @@ Vérifie que Caddy voit le site sur le réseau `proxy` (doit afficher une IP) :
 docker run --rm --network proxy busybox nslookup logo-site-web
 ```
 
-Crée ton compte administrateur (pour `/admin/`) :
+Crée ton compte administrateur (pour `/admin/`) — **sauf** si tu importes les
+anciennes données à l'étape 5 bis, qui contiennent déjà le compte `logo` :
 ```
 docker compose exec web python manage.py createsuperuser
+```
+
+---
+
+## 5 bis. Importer les anciennes données (`logosite_data.json`)
+
+Le fichier `backups/logosite_data.json` (export Django de l'ancien site :
+63 articles, 12 projets, 6 services, « Qui sommes-nous », contact, compte
+admin `logo`, abonnés newsletter) n'est pas dans git — il faut l'envoyer.
+
+**[PC]** (depuis le dossier du projet)
+```
+scp backups\logosite_data.json ubuntu@139.99.209.66:/opt/logo-site/backups/
+```
+> Si le dossier n'existe pas encore sur le serveur : `mkdir -p /opt/logo-site/backups` **[VPS]**.
+
+**[VPS]** L'import se fait dans une base vide : on arrête la veille RSS,
+on vide la base, on importe, on relance.
+```
+cd /opt/logo-site
+export COMPOSE_FILE=docker-compose.standalone.yml
+docker compose stop cron
+docker compose exec -T web python manage.py flush --noinput
+docker compose exec -T web python manage.py loaddata --format=json - < backups/logosite_data.json
+docker compose start cron
+```
+Résultat attendu : `Installed 100 object(s) from 1 fixture(s)`.
+
+> `flush` efface tout le contenu actuel de la base (dont les articles de
+> veille déjà importés, qui reviendront au prochain passage du `cron`, et un
+> éventuel compte créé avec `createsuperuser`).
+
+Connecte-toi ensuite à `/admin/` avec le compte **`logo`** et son ancien mot
+de passe. Mot de passe oublié ? Redéfinis-le :
+```
+docker compose exec web python manage.py changepassword logo
 ```
 
 ---
@@ -210,6 +247,18 @@ Copie régulièrement ces sauvegardes hors du serveur, depuis le **[PC]** :
 ```
 scp -r ubuntu@139.99.209.66:/opt/logo-site/backups .
 ```
+
+### Restaurer une sauvegarde `.sql.gz`
+
+**[VPS]**
+```
+cd /opt/logo-site
+ls backups/
+COMPOSE_FILE=docker-compose.standalone.yml sh scripts/restore_db.sh backups/logosite_AAAAMMJJ_HHMMSS.sql.gz
+```
+Le script demande confirmation, sauvegarde d'abord l'état actuel
+(`backups/avant_restauration_….sql.gz`), arrête le site, remplace la base
+par la sauvegarde, puis relance le site.
 
 ---
 
